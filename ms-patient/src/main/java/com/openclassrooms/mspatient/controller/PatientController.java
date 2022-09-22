@@ -1,5 +1,7 @@
 package com.openclassrooms.mspatient.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,19 @@ public class PatientController {
     public Patient getPatient(@RequestParam String firstName, @RequestParam String lastName,
 	    @RequestParam String birthday) {
 
+	Patient patient = patientService.getPatient(firstName, lastName, birthday);
+	if (patient == null)
+	    throw new ErrorGetPatient("An error occurred while searching for the patient");
+
+	return patient;
+    }
+    
+    @PostMapping("/patient/get")
+    public Patient getPatientProxy(@RequestBody HashMap<String, Object> mapParams) {
+	String firstName = mapParams.get("firstName").toString();
+	String lastName = mapParams.get("lastName").toString();
+	String birthday = mapParams.get("birthday").toString();
+	
 	Patient patient = patientService.getPatient(firstName, lastName, birthday);
 	if (patient == null)
 	    throw new ErrorGetPatient("An error occurred while searching for the patient");
