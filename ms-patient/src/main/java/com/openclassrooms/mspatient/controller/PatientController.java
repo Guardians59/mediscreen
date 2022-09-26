@@ -15,12 +15,15 @@ import com.openclassrooms.mspatient.controller.exception.ErrorGetPatient;
 import com.openclassrooms.mspatient.model.Patient;
 import com.openclassrooms.mspatient.service.IPatientService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 public class PatientController {
 
     @Autowired
     IPatientService patientService;
 
+    @ApiOperation(value = "Recupere les informations d'un patient.")
     @GetMapping("/patient/get")
     public Patient getPatient(@RequestParam String firstName, @RequestParam String lastName,
 	    @RequestParam String birthday) {
@@ -32,6 +35,7 @@ public class PatientController {
 	return patient;
     }
     
+    @ApiOperation(value = "Envoie les informations d'un patient au proxy.")
     @PostMapping("/patient/get")
     public Patient getPatientProxy(@RequestBody HashMap<String, Object> mapParams) {
 	String firstName = mapParams.get("firstName").toString();
