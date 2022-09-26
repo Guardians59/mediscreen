@@ -24,9 +24,13 @@ public class PatientServiceImpl implements IPatientService {
 	Patient newPatient = new Patient();
 	boolean result = false;
 	logger.debug("Adding a new patient");
-	
-	if ((patient.getFirstName() != null) && (patient.getLastName() != null) && (patient.getBirthday() != null)
-		&& (patient.getGender() != null) && (patient.getAddress() != null) && (patient.getPhoneNumber() != null)) {
+
+	if ((patient.getFirstName() != null || patient.getFirstName().isEmpty())
+		&& (patient.getLastName() != null || patient.getLastName().isEmpty())
+		&& (patient.getBirthday() != null || patient.getBirthday().isEmpty())
+		&& (patient.getGender() != null || patient.getGender().isEmpty())
+		&& (patient.getAddress() != null || patient.getAddress().isEmpty())
+		&& (patient.getPhoneNumber() != null || patient.getPhoneNumber().isEmpty())) {
 	    newPatient.setFirstName(patient.getFirstName());
 	    newPatient.setLastName(patient.getLastName());
 	    newPatient.setBirthday(patient.getBirthday());
@@ -58,9 +62,37 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     @Override
-    public boolean updatePatient() {
-	// TODO Auto-generated method stub
-	return false;
+    public boolean updatePatient(int id, Patient patientUpdated) {
+	boolean result = false;
+	Optional<Patient> patientOptional = patientRepository.findById(id);
+	Patient patient = new Patient();
+	logger.debug("Patient update");
+	if (patientOptional.isPresent()) {
+	    patient = patientOptional.get();
+	    logger.info("Patient successfully found");
+	    if ((patientUpdated.getAddress() == null || patientUpdated.getAddress().isBlank())
+		    || (patientUpdated.getBirthday() == null || patientUpdated.getBirthday().isBlank())
+		    || (patientUpdated.getFirstName() == null || patientUpdated.getFirstName().isBlank())
+		    || (patientUpdated.getGender() == null || patientUpdated.getGender().isBlank())
+		    || (patientUpdated.getLastName() == null || patientUpdated.getLastName().isBlank())
+		    || (patientUpdated.getPhoneNumber() == null || patientUpdated.getPhoneNumber().isBlank())) {
+		logger.error("Information is missing for the update");
+		
+	    } else {
+		patient.setAddress(patientUpdated.getAddress());
+		patient.setBirthday(patientUpdated.getBirthday());
+		patient.setFirstName(patientUpdated.getFirstName());
+		patient.setGender(patientUpdated.getGender());
+		patient.setLastName(patientUpdated.getLastName());
+		patient.setPhoneNumber(patientUpdated.getPhoneNumber());
+		patientRepository.save(patient);
+		logger.info("Updated patient information");
+		result = true;
+	    }
+	} else {
+	    logger.error("No patients found");
+	}
+	return result;
     }
 
 }

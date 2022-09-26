@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mspatient.controller.exception.ErrorGetPatient;
+import com.openclassrooms.mspatient.controller.exception.ErrorUpdatePatient;
 import com.openclassrooms.mspatient.model.Patient;
 import com.openclassrooms.mspatient.service.IPatientService;
 
@@ -29,21 +31,22 @@ public class PatientController {
 	    @RequestParam String birthday) {
 
 	Patient patient = patientService.getPatient(firstName, lastName, birthday);
-	if (patient == null)
+	
+	if (patient.getFirstName() == null) {
 	    throw new ErrorGetPatient("An error occurred while searching for the patient");
-
+	}
 	return patient;
     }
-    
+
     @ApiOperation(value = "Envoie les informations d'un patient au proxy.")
     @PostMapping("/patient/get")
     public Patient getPatientProxy(@RequestBody HashMap<String, Object> mapParams) {
 	String firstName = mapParams.get("firstName").toString();
 	String lastName = mapParams.get("lastName").toString();
 	String birthday = mapParams.get("birthday").toString();
-	
+
 	Patient patient = patientService.getPatient(firstName, lastName, birthday);
-	if (patient == null)
+	if (patient.getFirstName() == null)
 	    throw new ErrorGetPatient("An error occurred while searching for the patient");
 
 	return patient;
@@ -53,10 +56,21 @@ public class PatientController {
     public ResponseEntity<?> addPatient(@RequestBody Patient patient) {
 	boolean result = patientService.addPatient(patient);
 	if (result == true) {
-	    return ResponseEntity.status(HttpStatus.CREATED).body("Added a new patient " + patient.getFirstName() + " "
-		    + patient.getLastName() + " with success");
+	    return ResponseEntity.status(HttpStatus.CREATED).body(
+		    "Added a new patient " + patient.getFirstName() + " " + patient.getLastName() + " with success");
 	} else {
 	    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+    }
+
+    @PutMapping("patient/update")
+    public ResponseEntity<?> updatePatient(@RequestParam int id, @RequestBody Patient patientUpdate) {
+	boolean result = patientService.updatePatient(id, patientUpdate);
+	if (result == true) {
+	    return ResponseEntity.status(HttpStatus.OK).body(
+		    "Updated a patient " + patientUpdate.getFirstName() + " " + patientUpdate.getLastName() + " with success");
+	} else {
+	    throw new ErrorUpdatePatient("An error occurred while updating to the patient");
 	}
     }
 
