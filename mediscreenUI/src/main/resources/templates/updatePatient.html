@@ -7,7 +7,7 @@
 
 <!-- css -->
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-<link rel="stylesheet" th:href="@{/css/styleGetPatient.css}" />
+<link rel="stylesheet" th:href="@{/css/styleUpdatePatient.css}" />
 </head>
 <body>
 	<div class="container-fluid top">
@@ -32,53 +32,82 @@
 
 	<div class="container-fluid">
 		<div class="Text infos">
-			<h5>Informations du patient</h5>
+			<h5>Mise à jour des informations d'un patient</h5>
 		</div>
 	</div>
 
 	<div class="container menu col-lg-6 col-md-8 col-10">
 
-		<div th:if="${updateSuccess}">
-			<p style="color: green;" th:text="${updateSuccess}" align="center"></p>
-		</div>
-		<div th:if="${noUpdate}">
-			<p style="color: black;" th:text="${noUpdate}" align="center"></p>
-		</div>
+		<form action="#"
+			th:action="@{/patient/update/{id}(id=${patientBean.id})}" th:object="${patientBean}"
+			method="post">
 
-		<table class="table border-custom" th:object="${patientBean}">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col">Id</th>
-					<th scope="col">Prenom</th>
-					<th scope="col">Nom</th>
-					<th scope="col">Date de naissance</th>
-					<th scope="col">Genre</th>
-					<th scope="col">Adresse</th>
-					<th scope="col">Telephone</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th scope="row" th:text="*{id}"></th>
-					<td th:text="*{firstName}"></td>
-					<td th:text="*{lastName}"></td>
-					<td th:text="*{birthday}"></td>
-					<td th:text="*{gender}"></td>
-					<td th:text="*{address}"></td>
-					<td th:text="*{phoneNumber}"></td>
-				</tr>
-			</tbody>
-		</table>
+			<div th:if="${updateError}">
+				<p style="color: red;" th:text="${updateError}" align="center"></p>
+		     </div>
 
-		<div class="row">
-			<div class="text-center">
-				<a th:href="@{/patient/update/{id}(id=${patientBean.id})}">
-					<button class="btn btn-dark" type="button">Mise
-						à jour</button>
-				</a>
-				<button class="btn btn-danger"  type="button">Supprimer</button>
+			<div class="form-group flex-nowrap-firstName">
+			<label class="form-label">Prenom </label>
+			 <input type="text" th:field="*{firstName}" class="form-control"
+					placeholder="Prenom" aria-label="text"
+					aria-describedby="addon-wrapping">
+
 			</div>
-		</div>
+			
+			
+			<div class="form-group flex-nowrap-lastName">
+			<label class="form-label">Nom</label>
+			 <input type="text" th:field="*{lastName}" class="form-control"
+					placeholder="Nom" aria-label="text"
+					aria-describedby="addon-wrapping">
+			</div>
+
+			<div class="form-group flex-nowrap-birthday">
+			<label class="form-label">Date de naissance</label>
+			 <input type="text" th:field="*{birthday}" class="form-control"
+					placeholder="Date de naissance AAAA-MM-JJ" aria-label="text"
+					aria-describedby="addon-wrapping">
+			</div>
+
+			<div class="form-group flex-nowrap-gender">
+			
+			<label class="form-label">Genre</label>
+				<input type="text" th:field="*{gender}" class="form-control"
+					placeholder="Genre F/M" aria-label="text"
+					aria-describedby="addon-wrapping">
+			
+			</div>
+
+			<div class="form-group flex-nowrap-address">
+
+			<label class="form-label">Adresse</label>
+				<input type="text" th:field="*{address}" class="form-control"
+					placeholder="Adresse" aria-label="text"
+					aria-describedby="addon-wrapping">
+			
+			</div>
+
+			<div class="form-group flex-nowrap-phone">
+			
+			<label class="form-label">Telephone</label>
+				<input type="text" th:field="*{phoneNumber}" class="form-control"
+					placeholder="Telephone" aria-label="text"
+					aria-describedby="addon-wrapping">
+			
+			</div>
+
+			<div class="row">
+				<div class="button btn-cancel">
+				<a th:href="@{/patient/getPatient/{id}(id=${patientBean.id})}">
+			 		<button type="button" class="btn btn-danger cancel-button">Cancel</button>
+			 	</a>
+			 	</div>
+				<div class="button btn-update">
+					<button class="btn btn-dark" type="submit">Valider</button>
+
+				</div>
+			</div>
+		</form>
 	</div>
 
 </body>
