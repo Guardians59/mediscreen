@@ -60,6 +60,20 @@ public class PatientServiceImpl implements IPatientService {
 
 	return patient;
     }
+    
+    @Override
+    public Patient getPatientById(int id) {
+	Optional<Patient> patientOptional = patientRepository.findById(id);
+	Patient patient = new Patient();
+	logger.debug("Search patient with id : " + id);
+	if (patientOptional.isPresent()) {
+	    patient = patientOptional.get();
+	    logger.info("Patient successfully found");
+	} else {
+	    logger.error("No patients found");
+	}
+	return patient;
+    }
 
     @Override
     public boolean updatePatient(int id, Patient patientUpdated) {

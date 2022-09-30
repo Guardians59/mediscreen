@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +52,28 @@ public class PatientController {
 
 	return patient;
     }
+    
+    @ApiOperation(value = "Recupere les informations d'un patient via son id.")
+    @GetMapping("/patient/get/{id}")
+    public Patient getPatientById(@PathVariable("id") int id) {
+	Patient patient = patientService.getPatientById(id);
+	
+	if (patient.getFirstName() == null) {
+	    throw new ErrorGetPatient("An error occurred while searching for the patient");
+	}
+	return patient;
+    }
+    
+    @ApiOperation(value = "Envoie les informations d'un patient via son id au proxy.")
+    @PostMapping("/patient/get/{id}")
+    public Patient getPatientByIdProxy(@PathVariable("id") int id) {
+	Patient patient = patientService.getPatientById(id);
+	
+	if (patient.getFirstName() == null) {
+	    throw new ErrorGetPatient("An error occurred while searching for the patient");
+	}
+	return patient;
+    }
 
     @PostMapping("/patient/add")
     public ResponseEntity<?> addPatient(@RequestBody Patient patient) {
@@ -62,16 +85,13 @@ public class PatientController {
 	    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
     }
-
-    @PutMapping("patient/update")
-    public ResponseEntity<?> updatePatient(@RequestParam int id, @RequestBody Patient patientUpdate) {
+    @ApiOperation(value = "Mets à jour les informations d'un patient via son id.")
+    @PutMapping("patient/update/{id}")
+    public void updatePatient(@PathVariable("id") int id, @RequestBody Patient patientUpdate) {
 	boolean result = patientService.updatePatient(id, patientUpdate);
-	if (result == true) {
-	    return ResponseEntity.status(HttpStatus.OK).body(
-		    "Updated a patient " + patientUpdate.getFirstName() + " " + patientUpdate.getLastName() + " with success");
-	} else {
+	if (result == false) {
 	    throw new ErrorUpdatePatient("An error occurred while updating to the patient");
-	}
+	} 
     }
 
 }

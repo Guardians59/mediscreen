@@ -8,6 +8,8 @@ public interface IPatientService {
     
     public Patient getPatient(String firstName, String lastName, String birthday);
     
+    public Patient getPatientById(int id);
+    
     public boolean updatePatient(int id, Patient patientUpdated);
 
 }

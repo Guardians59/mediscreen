@@ -2,6 +2,7 @@ package com.openclassrooms.mspatient.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 
@@ -39,7 +40,27 @@ public class PatientServiceTest {
 	//WHEN
 	patient = patientService.getPatient("Test", "TestNone", "1966-12-30");
 	//THEN
-	assertEquals(patient.getAddress() == null, true);
+	assertTrue(patient.getAddress() == null);
+    }
+    
+    @Test
+    public void getPatientByIdTest() {
+	//GIVEN
+	Patient patient = new Patient();
+	//WHEN
+	patient = patientService.getPatientById(2);
+	//THEN
+	assertEquals(patient.getLastName(), "TestBorderline");
+    }
+    
+    @Test
+    public void getPatientByIdErrorTest() {
+	//GIVEN
+	Patient patient = new Patient();
+	//WHEN
+	patient = patientService.getPatientById(200);
+	//THEN
+	assertTrue(patient.getLastName() == null);
     }
     
     @Test

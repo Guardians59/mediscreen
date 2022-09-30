@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import com.google.gson.Gson;
@@ -61,8 +60,26 @@ public class PatientControllerIT {
 	mockMvc.perform(MockMvcRequestBuilders.get("/patient/get?firstName=Test&lastName=TestNone&birthday=1966-12-30")
 		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.gender").doesNotExist())
-		.andExpect(status().isNotFound())
+		.andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void getPatientByIdTest() throws Exception {
+	
+	mockMvc.perform(MockMvcRequestBuilders.get("/patient/get/2")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.gender").value("M"))
+		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    public void getPatientByIdErrorTest() throws Exception {
+	
+	mockMvc.perform(MockMvcRequestBuilders.get("/patient/get/200")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.gender").doesNotExist())
+		.andExpect(status().isNotFound());
     }
     
     @Test
@@ -71,17 +88,21 @@ public class PatientControllerIT {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "TestNone", "1966-12-31");
 	Patient patient = new Patient();
 	patient = patientOptional.get();
+	String phone = patient.getPhoneNumber();
 	patient.setPhoneNumber("111-222");
 	Gson gson = new Gson();
 	String json = gson.toJson(patient);
 	
-	mockMvc.perform(MockMvcRequestBuilders.put("/patient/update?id=1")
+	mockMvc.perform(MockMvcRequestBuilders.put("/patient/update/1")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(content().string("Updated a patient " + "Test" + " TestNone" + " with success"))
 		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
+	
+	//AFTER
+	patient.setPhoneNumber(phone);
+	patientRepository.save(patient);
 	
     }
     
@@ -91,20 +112,17 @@ public class PatientControllerIT {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "TestNone", "1966-12-31");
 	Patient patient = new Patient();
 	patient = patientOptional.get();
-	String phone = patient.getPhoneNumber();
 	patient.setPhoneNumber("");
 	Gson gson = new Gson();
 	String json = gson.toJson(patient);
 	
-	mockMvc.perform(MockMvcRequestBuilders.put("/patient/update?id=1")
+	mockMvc.perform(MockMvcRequestBuilders.put("/patient/update/1")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNotFound())
 		.andDo(MockMvcResultHandlers.print());
-	//AFTER
-	patient.setPhoneNumber(phone);
-	patientRepository.save(patient);
+	
     }
 
 }
