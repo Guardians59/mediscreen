@@ -3,8 +3,10 @@ package com.openclassrooms.mediscreenUI.proxies;
 import java.util.HashMap;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,5 +25,8 @@ public interface IMicroServicePatientProxy {
     
     @PutMapping(value = "patient/update/{id}")
     void updatePatient (@PathVariable("id") int id, @RequestBody PatientBean patientUpdated);
+    
+    @PostMapping(value = "patient/add") 
+    ResponseEntity<?> addPatient (@RequestBody PatientBean newPatient);
 
 }

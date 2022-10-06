@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.models.GetPatientModel;
 import com.openclassrooms.mediscreenUI.services.IFormValidService;
@@ -18,7 +17,7 @@ public class PatientController {
 
     @Autowired
     IPatientService patientService;
-    
+
     @Autowired
     IFormValidService formValid;
 
@@ -53,7 +52,7 @@ public class PatientController {
 	    return "searchPatient";
 	}
     }
-    
+
     @GetMapping("/patient/getPatient/{id}")
     public String getPatientById(@PathVariable("id") int id, Model model) {
 	PatientBean patientBean = new PatientBean();
@@ -80,23 +79,51 @@ public class PatientController {
 	boolean formValidResult = formValid.updateFormValid(patientUpdated);
 	if (formValidResult == true) {
 	    int result = patientService.updatePatient(id, patientUpdated);
-		if (result == 1) {
-		    PatientBean patient = patientService.getPatientById(id);
-		    model.addAttribute("patientBean", patient);
-		    model.addAttribute("updateSuccess", "La mise à jour à été effectuée avec succès");
-		    return "getPatient";
-		} else {
-		    PatientBean patient = patientService.getPatientById(id);
-		    model.addAttribute("patientBean", patient);
-		    model.addAttribute("noUpdate", "Aucune information n'a été modifiée");
-		    return "getPatient";
-		}
+	    if (result == 1) {
+		PatientBean patient = patientService.getPatientById(id);
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("updateSuccess", "La mise à jour à été effectuée avec succès");
+		return "getPatient";
+	    } else {
+		PatientBean patient = patientService.getPatientById(id);
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("noUpdate", "Aucune information n'a été modifiée");
+		return "getPatient";
+	    }
 	} else {
 	    PatientBean patientBean = patientService.getPatientById(id);
 	    model.addAttribute("patientBean", patientBean);
 	    model.addAttribute("updateError",
 		    "Une erreur est survenue, vérifier que vous remplissez tous les champs d'informations");
 	    return "updatePatient";
+	}
+    }
+
+    @GetMapping("/patient/add")
+    public String getAddPatientPage(Model model) {
+	PatientBean patient = new PatientBean();
+	model.addAttribute("newPatient", patient);
+	return "addPatient";
+    }
+
+    @PostMapping("/patient/add")
+    public String addPatient(@ModelAttribute("newPatient") PatientBean newPatient, Model model) {
+	boolean formValidResult = formValid.addFormValid(newPatient);
+	if (formValidResult == true) {
+	    boolean result = patientService.addPatient(newPatient);
+	    if (result == true) {
+		PatientBean patient = patientService.getPatient(newPatient.getFirstName(), newPatient.getLastName(),
+			newPatient.getBirthday());
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("addSuccess", "Le patient à été ajouté avec succès");
+		return "getPatient";
+	    } else {
+		return "addPatient";
+	    }
+	} else {
+	    model.addAttribute("addError",
+		    "Vérifier à remplir toutes les informations nécessaires, seul l'adresse et le téléphone peuvent ne pas être renseignés");
+	    return "addPatient";
 	}
     }
 

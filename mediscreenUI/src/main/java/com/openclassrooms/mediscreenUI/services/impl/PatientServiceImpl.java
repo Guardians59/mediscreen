@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
@@ -65,6 +66,22 @@ public class PatientServiceImpl implements IPatientService {
 	    patientProxy.updatePatient(id, patientUpdated);
 	    result = 1;
 	    logger.info("Patient information has been updated successfully");
+	}
+	return result;
+    }
+
+    @Override
+    public boolean addPatient(PatientBean newPatient) {
+	logger.debug("Add a new patient");
+	boolean result = false;
+	PatientBean patient = new PatientBean();
+	patient = newPatient;
+	ResponseEntity<?> resultAdd = patientProxy.addPatient(patient);
+	if(resultAdd.getStatusCode().value() == 201) {
+	    result = true;
+	    logger.info("Patient added with successfully");
+	} else {
+	    logger.error("An error occurred while adding to the patient");
 	}
 	return result;
     }

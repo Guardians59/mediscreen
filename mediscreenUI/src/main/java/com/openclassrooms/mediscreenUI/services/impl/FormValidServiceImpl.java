@@ -14,12 +14,22 @@ public class FormValidServiceImpl implements IFormValidService {
 	if ((patientUpdated.getFirstName() == null || patientUpdated.getFirstName().isBlank())
 		|| (patientUpdated.getLastName() == null || patientUpdated.getLastName().isBlank())
 		|| (patientUpdated.getBirthday() == null || patientUpdated.getBirthday().isBlank())
-		|| (patientUpdated.getAddress() == null || patientUpdated.getAddress().isBlank())
-		|| (patientUpdated.getGender() == null || patientUpdated.getGender().isBlank())
-		|| (patientUpdated.getPhoneNumber() == null || patientUpdated.getPhoneNumber().isBlank())) {
+		|| (patientUpdated.getGender() == null || patientUpdated.getGender().isBlank())) {
 	    result = false;
 	} 
 	
+	return result;
+    }
+
+    @Override
+    public boolean addFormValid(PatientBean newPatient) {
+	boolean result = true;
+	if ((newPatient.getFirstName() == null || newPatient.getFirstName().isBlank())
+		|| (newPatient.getLastName() == null || newPatient.getLastName().isBlank())
+		|| (newPatient.getBirthday() == null || newPatient.getBirthday().isBlank())
+		|| (newPatient.getGender() == null || newPatient.getGender().isBlank())) {
+	    result = false;
+	} 
 	return result;
     }
 }
