@@ -25,12 +25,12 @@ public class PatientServiceImpl implements IPatientService {
 	boolean result = false;
 	logger.debug("Adding a new patient");
 
-	if ((patient.getFirstName() != null || patient.getFirstName().isEmpty())
-		&& (patient.getLastName() != null || patient.getLastName().isEmpty())
-		&& (patient.getBirthday() != null || patient.getBirthday().isEmpty())
-		&& (patient.getGender() != null || patient.getGender().isEmpty())
-		&& (patient.getAddress() != null || patient.getAddress().isEmpty())
-		&& (patient.getPhoneNumber() != null || patient.getPhoneNumber().isEmpty())) {
+	if ((patient.getFirstName() == null || patient.getFirstName().isEmpty())
+		|| (patient.getLastName() == null || patient.getLastName().isEmpty())
+		|| (patient.getBirthday() == null || patient.getBirthday().isEmpty())
+		|| (patient.getGender() == null || patient.getGender().isEmpty())) {
+	    logger.error("An error occurred while adding the patient");
+	} else {
 	    newPatient.setFirstName(patient.getFirstName());
 	    newPatient.setLastName(patient.getLastName());
 	    newPatient.setBirthday(patient.getBirthday());
@@ -38,9 +38,8 @@ public class PatientServiceImpl implements IPatientService {
 	    newPatient.setAddress(patient.getAddress());
 	    newPatient.setPhoneNumber(patient.getPhoneNumber());
 	    result = true;
+	    patientRepository.save(newPatient);
 	    logger.info("Added a new patient successfully executed");
-	} else {
-	    logger.error("An error occurred while adding the patient");
 	}
 	return result;
     }

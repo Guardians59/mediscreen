@@ -124,5 +124,44 @@ public class PatientControllerIT {
 		.andDo(MockMvcResultHandlers.print());
 	
     }
+    
+    @Test
+    public void addPatientTest() throws Exception {
+	Patient patient = new Patient();
+	patient.setFirstName("Test");
+	patient.setLastName("ControllerTest");
+	patient.setBirthday("2000-02-10");
+	patient.setGender("F");
+	Gson gson = new Gson();
+	String json = gson.toJson(patient);
+	
+	mockMvc.perform(MockMvcRequestBuilders.post("/patient/add")
+		.content(json)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andDo(MockMvcResultHandlers.print());
+	
+	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ControllerTest", "2000-02-10");
+	patientRepository.deleteById(patientOptional.get().getId());
+	
+    }
+    
+    @Test
+    public void addPatientErrorTest() throws Exception {
+	Patient patient = new Patient();
+	patient.setFirstName("Test");
+	patient.setLastName("ControllerErrorTest");
+	patient.setBirthday("2000-02-10");
+	Gson gson = new Gson();
+	String json = gson.toJson(patient);
+	
+	mockMvc.perform(MockMvcRequestBuilders.post("/patient/add")
+		.content(json)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
+	
+    }
 
 }

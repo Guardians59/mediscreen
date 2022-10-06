@@ -99,5 +99,37 @@ public class PatientServiceTest {
 	assertEquals(result, false);
 	assertEquals(phone, newPhone);
     }
+    
+    @Test
+    public void addPatientTest() {
+	//GIVEN
+	Patient patient = new Patient();
+	patient.setFirstName("Test");
+	patient.setLastName("ServiceTest");
+	patient.setBirthday("1999-02-10");
+	patient.setGender("M");
+	//WHEN
+	patientService.addPatient(patient);
+	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ServiceTest", "1999-02-10");
+	//THEN
+	assertEquals(patientOptional.isPresent(), true);
+	//AFTER
+	patientRepository.deleteById(patientOptional.get().getId());
+    }
+    
+    @Test
+    public void addPatientErrorTest() {
+	Patient patient = new Patient();
+	patient.setFirstName("Test");
+	patient.setLastName("ServiceTest2");
+	patient.setBirthday("1999-02-12");
+	//patient.setGender("M");
+	patient.setAddress("1 rue du parc");
+	//WHEN
+	patientService.addPatient(patient);
+	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ServiceTest2", "1999-02-12");
+	//THEN
+	assertEquals(patientOptional.isPresent(), false);
+    }
 
 }

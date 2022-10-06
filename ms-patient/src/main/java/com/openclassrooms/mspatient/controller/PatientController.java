@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.openclassrooms.mspatient.controller.exception.ErrorAddPatient;
 import com.openclassrooms.mspatient.controller.exception.ErrorGetPatient;
 import com.openclassrooms.mspatient.controller.exception.ErrorUpdatePatient;
 import com.openclassrooms.mspatient.model.Patient;
@@ -78,11 +79,10 @@ public class PatientController {
     @PostMapping("/patient/add")
     public ResponseEntity<?> addPatient(@RequestBody Patient patient) {
 	boolean result = patientService.addPatient(patient);
-	if (result == true) {
-	    return ResponseEntity.status(HttpStatus.CREATED).body(
-		    "Added a new patient " + patient.getFirstName() + " " + patient.getLastName() + " with success");
+	if (result == false) {
+	    throw new ErrorAddPatient("An error occurred while adding to the patient");
 	} else {
-	    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	    return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
     }
     @ApiOperation(value = "Mets à jour les informations d'un patient via son id.")
@@ -91,7 +91,7 @@ public class PatientController {
 	boolean result = patientService.updatePatient(id, patientUpdate);
 	if (result == false) {
 	    throw new ErrorUpdatePatient("An error occurred while updating to the patient");
-	} 
+	}
     }
 
 }
