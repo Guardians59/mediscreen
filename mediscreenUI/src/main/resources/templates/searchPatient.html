@@ -50,7 +50,7 @@
 							d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
       </svg>
 				</span> <input type="text" th:field="*{firstName}" class="form-control"
-					placeholder="FirstName" aria-label="text"
+					placeholder="Prénom" aria-label="text"
 					aria-describedby="addon-wrapping">
 
 			</div>
@@ -64,7 +64,7 @@
 							d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
       </svg>
 				</span> <input type="text" th:field="*{lastName}" class="form-control"
-					placeholder="LastName" aria-label="text"
+					placeholder="Nom" aria-label="text"
 					aria-describedby="addon-wrapping">
 
 			</div>
@@ -78,16 +78,18 @@
 							d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1 5 0v.006c0 .07 0 .27-.038.494H15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2.038A2.968 2.968 0 0 1 3 2.506V2.5zm1.068.5H7v-.5a1.5 1.5 0 1 0-3 0c0 .085.002.274.045.43a.522.522 0 0 0 .023.07zM9 3h2.932a.56.56 0 0 0 .023-.07c.043-.156.045-.345.045-.43a1.5 1.5 0 0 0-3 0V3zM1 4v2h6V4H1zm8 0v2h6V4H9zm5 3H9v8h4.5a.5.5 0 0 0 .5-.5V7zm-7 8V7H2v7.5a.5.5 0 0 0 .5.5H7z" />
 </svg>
 				</span> <input type="text" th:field="*{birthday}" class="form-control"
-					placeholder="Birthday AAAA-MM-JJ" aria-label="text"
+					placeholder="Date de naissance AAAA-MM-JJ" aria-label="text"
 					aria-describedby="addon-wrapping">
 
 			</div>
 
-			<div class="row">
-				<div class="button btn-search">
-					<button class="btn btn-dark" type="submit">Recherche</button>
-
-				</div>
+			<div class="row btn-home">
+				<div class="text-center">
+				<a th:href="@{/}">
+					<button class="btn btn-danger" type="button">Retour</button>
+				</a>
+				<button class="btn btn-dark"  type="submit">Recherche</button>
+			</div>
 			</div>
 		</form>
 	</div>
