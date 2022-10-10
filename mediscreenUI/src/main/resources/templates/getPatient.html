@@ -86,7 +86,9 @@
 					<button class="btn btn-dark" type="button">Mise
 						à jour</button>
 				</a>
+				<a th:href="@{/patient/delete/confirm/{id}(id=${patientBean.id})}">
 				<button class="btn btn-danger"  type="button">Supprimer</button>
+				</a>
 			</div>
 		</div>
 	</div>

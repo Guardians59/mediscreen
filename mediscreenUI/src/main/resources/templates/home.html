@@ -32,6 +32,9 @@
 	
 	<div class="container-fluid menu">
 	<div class="row btn-home">
+	<div th:if="${deleteSuccess}">
+			<p style="color: green;" th:text="${deleteSuccess}" align="center"></p>
+		</div>
 				<div class="text-center">
 				<a th:href="@{/patient/add}">
 			 		<button type="button" class="btn btn-dark">Ajouter un patient</button>
