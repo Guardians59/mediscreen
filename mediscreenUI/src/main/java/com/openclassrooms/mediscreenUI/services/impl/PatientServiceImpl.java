@@ -86,4 +86,18 @@ public class PatientServiceImpl implements IPatientService {
 	return result;
     }
 
+    @Override
+    public boolean deletePatient(int id) {
+	logger.debug("Delete the patient with id : " + id);
+	boolean result = false;
+	ResponseEntity<?> resultDelete = patientProxy.deletePatient(id);
+	if(resultDelete.getStatusCode().value() == 200) {
+	    result = true;
+	    logger.info("The patient with id " + id + " deleted with success");
+	} else {
+	    logger.error("An error occurred while deleting the patient");
+	}
+	return result;
+    }
+
 }

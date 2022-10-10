@@ -160,5 +160,31 @@ public class PatientServiceTest {
 	//THEN
 	assertEquals(result, false);
     }
+    
+    @Test
+    public void deletePatientTest() {
+	//GIVEN
+	boolean result;
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(60)).thenReturn(resultDelete);
+	result = patientService.deletePatient(60);
+	//THEN
+	assertEquals(result, true);
+    }
+    
+    @Test
+    public void deletePatientErrorTest() {
+	//GIVEN
+	boolean result;
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(61)).thenReturn(resultDelete);
+	result = patientService.deletePatient(61);
+	//THEN
+	assertEquals(result, false);
+    }
 
 }

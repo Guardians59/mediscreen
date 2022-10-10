@@ -8,8 +8,10 @@ public interface IPatientService {
     
     public PatientBean getPatientById(int id);
     
-    public int updatePatient (int id, PatientBean patientUpdated);
+    public int updatePatient(int id, PatientBean patientUpdated);
     
-    public boolean addPatient (PatientBean newPatient);
+    public boolean addPatient(PatientBean newPatient);
+    
+    public boolean deletePatient(int id);
 
 }

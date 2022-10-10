@@ -313,5 +313,67 @@ public class PatientControllerTest {
 		.andExpect(view().name("addPatient"));
 	
     }
+    
+    @Test
+    public void deletePatientTest() throws Exception {
+	//GIVEN
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(70)).thenReturn(resultDelete);
+	when(patientService.deletePatient(70)).thenReturn(true);
+	//THEN
+	mockMvc.perform(get("/patient/delete/70")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(model().attributeExists("deleteSuccess"))
+		.andExpect(view().name("home"));
+	
+    }
+    
+    @Test
+    public void deletePatientErrorTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	patient.setId(71);
+	patient.setFirstName("Test");
+	patient.setLastName("TestAddController");
+	patient.setGender("M");
+	patient.setBirthday("1985-08-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(71)).thenReturn(resultDelete);
+	when(patientService.deletePatient(71)).thenReturn(false);
+	when(patientService.getPatientById(71)).thenReturn(patient);
+	//THEN
+	mockMvc.perform(get("/patient/delete/71")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(model().attributeExists("deleteError"))
+		.andExpect(view().name("deletePatient"));
+	
+    }
+    
+    @Test
+    public void confirmDeletePatientTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	patient.setId(71);
+	patient.setFirstName("Test");
+	patient.setLastName("TestAddController");
+	patient.setGender("M");
+	patient.setBirthday("1985-08-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	//WHEN
+	when(patientService.getPatientById(71)).thenReturn(patient);
+	//THEN
+	mockMvc.perform(get("/patient/delete/confirm/71")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.flashAttr("patientBean", patient))
+		.andExpect(view().name("deletePatient"));
+	
+    }
 
 }

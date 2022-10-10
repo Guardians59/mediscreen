@@ -3,6 +3,7 @@ package com.openclassrooms.mediscreenUI.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -126,5 +127,25 @@ public class PatientController {
 	    return "addPatient";
 	}
     }
-
-}
+    
+    @GetMapping("/patient/delete/confirm/{id}")
+    public String deletePatientPage(@PathVariable("id") int id, Model model) {
+	PatientBean patient = patientService.getPatientById(id);
+	model.addAttribute("patientBean", patient);
+	return "deletePatient";
+    }
+    
+    @GetMapping("/patient/delete/{id}")
+    public String deletePatient(@PathVariable("id") int id, Model model) {
+	boolean result = patientService.deletePatient(id);
+	if (result == true) {
+	    model.addAttribute("deleteSuccess", "Le patient à été supprimé avec succès");
+	    return "home";
+	} else {
+	    PatientBean patient = patientService.getPatientById(id);
+	    model.addAttribute("patientBean", patient);
+	    model.addAttribute("deleteError", "Une erreur est survenue lors de la tentative de suppression du patient, veuillez réessayer");
+	    return "deletePatient";
+	}
+	}
+    }
