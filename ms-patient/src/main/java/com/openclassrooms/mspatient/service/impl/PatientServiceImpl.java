@@ -54,7 +54,7 @@ public class PatientServiceImpl implements IPatientService {
 	    patient = patientOptional.get();
 	    logger.info("Patient successfully found");
 	} else {
-	    logger.error("No patients found");
+	    logger.error("No patient found");
 	}
 
 	return patient;
@@ -103,7 +103,21 @@ public class PatientServiceImpl implements IPatientService {
 		result = true;
 	    }
 	} else {
-	    logger.error("No patients found");
+	    logger.error("No patient found");
+	}
+	return result;
+    }
+
+    @Override
+    public boolean deletePatient(int id) {
+	logger.debug("Delete the patient with id : " + id);
+	boolean result = false;
+	if(patientRepository.existsById(id)) {
+	    patientRepository.deleteById(id);
+	    result = true;
+	    logger.info("Patient deleted with success");
+	} else {
+	    logger.error("An error occured, no patient found with id : " + id);
 	}
 	return result;
     }

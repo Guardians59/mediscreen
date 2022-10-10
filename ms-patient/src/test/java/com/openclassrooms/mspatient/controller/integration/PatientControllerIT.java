@@ -126,7 +126,7 @@ public class PatientControllerIT {
     }
     
     @Test
-    public void addPatientTest() throws Exception {
+    public void addPatientAndDeleteTest() throws Exception {
 	Patient patient = new Patient();
 	patient.setFirstName("Test");
 	patient.setLastName("ControllerTest");
@@ -143,7 +143,13 @@ public class PatientControllerIT {
 		.andDo(MockMvcResultHandlers.print());
 	
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ControllerTest", "2000-02-10");
-	patientRepository.deleteById(patientOptional.get().getId());
+	int id = patientOptional.get().getId();
+	
+	mockMvc.perform(MockMvcRequestBuilders.delete("/patient/delete/" + id)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andDo(MockMvcResultHandlers.print());
 	
     }
     
@@ -162,6 +168,14 @@ public class PatientControllerIT {
 		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNotFound());
 	
+    }
+    
+    @Test
+    public void deletePatientErrorTest() throws Exception {
+	mockMvc.perform(MockMvcRequestBuilders.delete("/patient/delete/500")
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
     }
 
 }

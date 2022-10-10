@@ -11,5 +11,7 @@ public interface IPatientService {
     public Patient getPatientById(int id);
     
     public boolean updatePatient(int id, Patient patientUpdated);
+    
+    public boolean deletePatient(int id);
 
 }

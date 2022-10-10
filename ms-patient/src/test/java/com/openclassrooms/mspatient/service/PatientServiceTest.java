@@ -101,7 +101,7 @@ public class PatientServiceTest {
     }
     
     @Test
-    public void addPatientTest() {
+    public void addPatientAndDeleteTest() {
 	//GIVEN
 	Patient patient = new Patient();
 	patient.setFirstName("Test");
@@ -113,8 +113,15 @@ public class PatientServiceTest {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ServiceTest", "1999-02-10");
 	//THEN
 	assertEquals(patientOptional.isPresent(), true);
-	//AFTER
-	patientRepository.deleteById(patientOptional.get().getId());
+	
+	//GIVEN
+	boolean resultDelete = false;
+	//WHEN
+	resultDelete = patientService.deletePatient(patientOptional.get().getId());
+	boolean result = patientRepository.existsById(patientOptional.get().getId());
+	//THEN
+	assertEquals(resultDelete, true);
+	assertEquals(result, false);
     }
     
     @Test
@@ -123,7 +130,6 @@ public class PatientServiceTest {
 	patient.setFirstName("Test");
 	patient.setLastName("ServiceTest2");
 	patient.setBirthday("1999-02-12");
-	//patient.setGender("M");
 	patient.setAddress("1 rue du parc");
 	//WHEN
 	patientService.addPatient(patient);
