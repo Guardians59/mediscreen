@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: mysql:8
+    container_name: mysqldb
+    restart: always
+    environment:
+      MYSQL_ROOT_USERNAME: 'root'
+      MYSQL_ROOT_PASSWORD: 'rootroot'
+      MYSQL_DATABASE: 'mediscreen'
+    ports:
+      - '3307:3306'
+    networks:
+      - mediscreen-network
+    volumes:
+      - mediscreendb:/var/lib/mysql
+      
+  patient:
+    depends_on:
+     - db
+    image: ms-patient-image
+    container_name: ms-patient
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb/mediscreen?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootroot
+    ports:
+      - 8081:8081
+    restart: always
+    networks:
+      - mediscreen-network
+      
+networks:
+  mediscreen-network:
+    driver: bridge
+    
+volumes:
+  mediscreendb:
+      
