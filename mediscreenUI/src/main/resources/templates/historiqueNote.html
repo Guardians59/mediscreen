@@ -7,7 +7,7 @@
 
 <!-- css -->
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-<link rel="stylesheet" th:href="@{/css/styleGetPatient.css}" />
+<link rel="stylesheet" th:href="@{/css/styleHistoriqueNote.css}" />
 </head>
 <body>
 	<div class="container-fluid top">
@@ -29,17 +29,19 @@
 			<h4>Mediscreen</h4>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<div class="col-6 nav-list">
-			<a href="/patient/add">Ajouter un patient</a>&nbsp;|&nbsp;
-			<a href="/patient/search">Rechercher un patient</a>
+			<a href="/patient/add">Ajouter un patient</a>&nbsp;|&nbsp; <a
+				href="/patient/search">Rechercher un patient</a>
 		</div>
 	</div>
 
 	<div class="container-fluid">
 		<div class="Text infos">
-			<h5>Informations du patient</h5>
+			<h5>
+				Historique médical du patient <b th:text="${name.patient}"></b>
+			</h5>
 		</div>
 	</div>
 
@@ -55,43 +57,30 @@
 			<p style="color: black;" th:text="${noUpdate}" align="center"></p>
 		</div>
 
-		<table class="table border-custom" th:object="${patientBean}">
-			<thead class="thead-dark">
+		<table class="table border-custom" th:object="${noteBean}">
+			<thead class="thead-dark text-center">
 				<tr>
-					<th scope="col">Id</th>
-					<th scope="col">Prenom</th>
-					<th scope="col">Nom</th>
-					<th scope="col">Date de naissance</th>
-					<th scope="col">Genre</th>
-					<th scope="col">Adresse</th>
-					<th scope="col">Telephone</th>
+					<th scope="col">Note</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th scope="row" th:text="*{id}"></th>
-					<td th:text="*{firstName}"></td>
-					<td th:text="*{lastName}"></td>
-					<td th:text="*{birthday}"></td>
-					<td th:text="*{gender}"></td>
-					<td th:text="*{address}"></td>
-					<td th:text="*{phoneNumber}"></td>
+				<tr th:each="n : ${noteBean}">
+					<th scope="row" th:text="${n.note}"></th>
+					<td>
+							<button type="button" class="btn btn-dark">Modifier</button>
+					
+							<button type="button" class="btn btn-danger">Supprimer</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 
 		<div class="row">
 			<div class="text-center">
-				<a th:href="@{/patient/update/{id}(id=${patientBean.id})}">
-					<button class="btn btn-dark" type="button">Mise
-						à jour</button>
-				</a>
-				<a th:href="@{/patient/delete/confirm/{id}(id=${patientBean.id})}">
-				<button class="btn btn-danger"  type="button">Supprimer</button>
-				</a>
-				<a th:href="@{/note/getByPatientId/{id}(id=${patientBean.id})}">
-					<button class="btn btn-dark" type="button">Note médicale</button>
-				</a>
+
+				<button class="btn btn-dark" type="button">Ajouter une note</button>
+
+
 			</div>
 		</div>
 	</div>
