@@ -182,7 +182,7 @@ public class PatientControllerTest {
 	patientUpdated.setAddress("2 rue test");
 	patientUpdated.setPhoneNumber("03253636");
 	//WHEN
-	when(formValidService.updateFormValid(patientUpdated)).thenReturn(true);
+	when(formValidService.updatePatientFormValid(patientUpdated)).thenReturn(true);
 	when(patientService.updatePatient(11, patientUpdated)).thenReturn(1);
 	when(microServicePatientProxyMock.getPatientById(11)).thenReturn(patient);
 	when(patientService.getPatientById(11)).thenReturn(patient);
@@ -214,7 +214,7 @@ public class PatientControllerTest {
 	patientUpdated.setAddress("2 rue test");
 	patientUpdated.setPhoneNumber("032536");
 	//WHEN
-	when(formValidService.updateFormValid(patientUpdated)).thenReturn(true);
+	when(formValidService.updatePatientFormValid(patientUpdated)).thenReturn(true);
 	when(patientService.updatePatient(11, patientUpdated)).thenReturn(0);
 	when(microServicePatientProxyMock.getPatientById(11)).thenReturn(patient);
 	when(patientService.getPatientById(11)).thenReturn(patient);
@@ -246,7 +246,7 @@ public class PatientControllerTest {
 	patientUpdated.setAddress("");
 	patientUpdated.setPhoneNumber("032536");
 	//WHEN
-	when(formValidService.updateFormValid(patientUpdated)).thenReturn(false);
+	when(formValidService.updatePatientFormValid(patientUpdated)).thenReturn(false);
 	when(patientService.updatePatient(11, patientUpdated)).thenReturn(-1);
 	when(microServicePatientProxyMock.getPatientById(11)).thenReturn(patient);
 	when(patientService.getPatientById(11)).thenReturn(patient);
@@ -279,7 +279,7 @@ public class PatientControllerTest {
 	ResponseEntity resultAdd = Mockito.mock(ResponseEntity.class);
 	Mockito.when(resultAdd.getStatusCode()).thenReturn(HttpStatus.CREATED);
 	//WHEN
-	when(formValidService.addFormValid(patient)).thenReturn(true);
+	when(formValidService.addPatientFormValid(patient)).thenReturn(true);
 	when(microServicePatientProxyMock.addPatient(patient)).thenReturn(resultAdd);
 	when(patientService.addPatient(patient)).thenReturn(true);
 	when(patientService.getPatient(patient.getFirstName(), patient.getLastName() , patient.getBirthday())).thenReturn(patient);
@@ -304,7 +304,7 @@ public class PatientControllerTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	//WHEN
-	when(formValidService.addFormValid(patient)).thenReturn(false);
+	when(formValidService.addPatientFormValid(patient)).thenReturn(false);
 	//THEN
 	mockMvc.perform(post("/patient/add")
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED)

@@ -77,7 +77,7 @@ public class PatientController {
 
     @PostMapping("/patient/update/{id}")
     public String updatePatient(@PathVariable("id") int id, @ModelAttribute PatientBean patientUpdated, Model model) {
-	boolean formValidResult = formValid.updateFormValid(patientUpdated);
+	boolean formValidResult = formValid.updatePatientFormValid(patientUpdated);
 	if (formValidResult == true) {
 	    int result = patientService.updatePatient(id, patientUpdated);
 	    if (result == 1) {
@@ -109,7 +109,7 @@ public class PatientController {
 
     @PostMapping("/patient/add")
     public String addPatient(@ModelAttribute("newPatient") PatientBean newPatient, Model model) {
-	boolean formValidResult = formValid.addFormValid(newPatient);
+	boolean formValidResult = formValid.addPatientFormValid(newPatient);
 	if (formValidResult == true) {
 	    boolean result = patientService.addPatient(newPatient);
 	    if (result == true) {
