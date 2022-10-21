@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.google.gson.Gson;
+import com.openclassrooms.msnotes.model.Note;
 import com.openclassrooms.msnotes.service.INoteService;
 
 @SpringBootTest
@@ -42,6 +44,37 @@ public class NoteControllerIT {
 		.andExpect(jsonPath("$.[0].patient").value("TestEarlyOnSet"))
 		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    public void addNoteTest() throws Exception {
+	Note note = new Note();
+	note.setPatient("TestAdd");
+	note.setNote("Test controller adding the note" );
+	Gson gson = new Gson();
+	String json = gson.toJson(note);
+	
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12")
+		.content(json)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    public void addNoteErrorTest() throws Exception {
+	Note note = new Note();
+	note.setPatient("");
+	note.setNote("Test controller adding the note" );
+	Gson gson = new Gson();
+	String json = gson.toJson(note);
+	
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12")
+		.content(json)
+		.contentType(MediaType.APPLICATION_JSON)
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isNotFound());
     }
 
 }

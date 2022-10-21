@@ -11,7 +11,7 @@ import com.openclassrooms.msnotes.model.Note;
 @Repository
 public interface INoteRepository extends MongoRepository<Note, String> {
     
-    @Query("{ 'patientId' : '?0' }")
+    @Query("{ 'patientId' : ?0 }")
     public List<Note> findByPatientId(int patientId);
 
 }
