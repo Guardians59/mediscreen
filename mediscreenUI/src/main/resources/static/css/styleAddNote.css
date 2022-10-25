@@ -1,0 +1,78 @@
+.top {
+	height: 30px;
+	margin-top: -3px;
+	background-color: black;
+}
+
+.bi-heart-pulse {
+	color: red;
+	text-align: center;
+	margin-top: 3px;
+	margin-right: 75px;
+}
+
+.titre {
+	text-align: center;
+	margin-top: -25px;
+	color: red;
+}
+
+.bi-heart-pulse-two {
+	color: red;
+	text-align: center;
+	margin-top: -22px;
+	margin-left: 220px;
+}
+
+.infos {
+	text-align: center;
+	color: black;
+	margin-top: 30px;
+}
+
+.menu {
+	margin-top: 30px;
+	border: 2px solid red;
+	border-radius: 5px;
+}
+
+.flex-nowrap-name {
+	margin: auto;
+	width: auto;
+	padding-left: 120px;
+	padding-right: 120px;
+	margin-top: 50px;
+}
+
+.flex-nowrap-note {
+	margin: auto;
+	width: auto;
+	padding-left: 120px;
+	padding-right: 120px;
+	margin-top: 10px;
+}
+
+.btn-cancel {
+	width: auto;
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.btn-add {
+	width: auto;
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+@media screen and (max-width:700px) {
+	.flex-nowrap-name {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.flex-nowrap-note {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}

@@ -7,7 +7,7 @@
 
 <!-- css -->
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-<link rel="stylesheet" th:href="@{/css/styleHistoriqueNote.css}" />
+<link rel="stylesheet" th:href="@{/css/styleAddNote.css}" />
 </head>
 <body>
 	<div class="container-fluid top">
@@ -30,58 +30,49 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-6 nav-list">
-			<a href="/patient/add">Ajouter un patient</a>&nbsp;|&nbsp; <a
-				href="/patient/search">Rechercher un patient</a>
-		</div>
-	</div>
-
 	<div class="container-fluid">
 		<div class="Text infos">
-			<h5>
-				Historique médical du patient <b th:text="${name.patient}"></b>
-			</h5>
+			<h5>Ajout d'une note médical pour le patient <b th:text="${patientBean.lastName}"></b></h5>
 		</div>
 	</div>
 
 	<div class="container menu col-lg-6 col-md-8 col-10">
 
-		<div th:if="${addSuccess}">
-			<p style="color: green;" th:text="${addSuccess}" align="center"></p>
-		</div>
-		<div th:if="${updateSuccess}">
-			<p style="color: green;" th:text="${updateSuccess}" align="center"></p>
-		</div>
-		<div th:if="${noUpdate}">
-			<p style="color: black;" th:text="${noUpdate}" align="center"></p>
-		</div>
+		<form action="#"
+			th:action="@{/note/add/{id}(id=${patientBean.id})}" th:object="${newNote}"
+			method="post">
 
-		<table class="table border-custom" th:object="${noteBean}">
-			<thead class="thead-dark text-center">
-				<tr>
-					<th scope="col">Note</th>
-					<th scope="col">Option</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="n : ${noteBean}">
-					<th scope="row" th:text="${n.note}"></th>
-					<td>
-						<button type="button" class="btn btn-dark">Modifier</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+			<div th:if="${addError}">
+				<p style="color: red;" th:text="${addError}" align="center"></p>
+		     </div>
 
-		<div class="row">
-			<div class="text-center">
-			  <a th:href="@{/note/add/{id}(id=${patientBean.id})}">
-				<button class="btn btn-dark" type="button">Ajouter une note</button>
-			  </a>
-
+			<div class="form-group flex-nowrap-name">
+			<label class="form-label">Nom du patient </label>
+			 <input type="text" th:field="*{patient}" class="form-control"
+					placeholder="Nom du patient" aria-label="text"
+					aria-describedby="addon-wrapping">
+			
 			</div>
-		</div>
+			
+			
+			<div class="form-group flex-nowrap-note">
+			<label for="exampleFormControlTextarea1">Note médicale</label>
+    		<textarea type="text" th:field="*{note}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					
+			</div>
+
+			<div class="row">
+				<div class="button btn-cancel">
+				<a th:href="@{/note/getByPatientId/{id}(id=${patientBean.id})}">
+			 		<button type="button" class="btn btn-danger cancel-button">Retour</button>
+			 	</a>
+			 	</div>
+				<div class="button btn-add">
+					<button class="btn btn-dark" type="submit">Valider</button>
+
+				</div>
+			</div>
+		</form>
 	</div>
 
 </body>
