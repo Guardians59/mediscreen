@@ -8,6 +8,10 @@ public interface INoteService {
     
     public List<NoteBean> getNoteByPatientId(int patientId);
     
-    public boolean addNote(NoteBean note, int patientId);
+    public boolean addNote(NoteBean note, int patientId, String patientName);
+    
+    public int updateNoteById(String id, NoteBean noteUpdated);
+    
+    public NoteBean getNoteById(String id);
 
 }

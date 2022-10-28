@@ -47,12 +47,10 @@ public class NoteServiceTest {
 	//GIVEN
 	boolean result = false;
 	Note note = new Note();
-	//note.setPatientId(10);
-	note.setPatient("TestAdd");
 	note.setNote("Test for the add note");
 	List<Note> list = new ArrayList<>();
 	//WHEN
-	result = noteService.addNoteByPatientId(note, 10);
+	result = noteService.addNoteByPatientId(note, 10, "Test add");
 	list = noteRepository.findByPatientId(10);
 	//THEN
 	assertEquals(result, true);
@@ -68,15 +66,19 @@ public class NoteServiceTest {
 	boolean result = false;
 	Note note = new Note();
 	List<Note> list = new ArrayList<>();
-	//note.setPatientId(10);
-	note.setPatient("TestAdd");
 	note.setNote("");
 	//WHEN
-	result = noteService.addNoteByPatientId(note, 11);
+	result = noteService.addNoteByPatientId(note, 11, "Test error add");
 	list = noteRepository.findByPatientId(11);
 	//THEN
 	assertEquals(result, false);
 	assertTrue(list.isEmpty());
+    }
+    
+    @Test
+    public void updateNoteTest() {
+	//GIVEN
+	
     }
 
 }

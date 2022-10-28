@@ -36,14 +36,6 @@
 	border-radius: 5px;
 }
 
-.flex-nowrap-name {
-	margin: auto;
-	width: auto;
-	padding-left: 120px;
-	padding-right: 120px;
-	margin-top: 50px;
-}
-
 .flex-nowrap-note {
 	margin: auto;
 	width: auto;
@@ -67,10 +59,6 @@
 }
 
 @media screen and (max-width:700px) {
-	.flex-nowrap-name {
-		padding-left: 0;
-		padding-right: 0;
-	}
 	.flex-nowrap-note {
 		padding-left: 0;
 		padding-right: 0;

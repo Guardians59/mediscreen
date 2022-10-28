@@ -45,15 +45,6 @@
 			<div th:if="${addError}">
 				<p style="color: red;" th:text="${addError}" align="center"></p>
 		     </div>
-
-			<div class="form-group flex-nowrap-name">
-			<label class="form-label">Nom du patient </label>
-			 <input type="text" th:field="*{patient}" class="form-control"
-					placeholder="Nom du patient" aria-label="text"
-					aria-describedby="addon-wrapping">
-			
-			</div>
-			
 			
 			<div class="form-group flex-nowrap-note">
 			<label for="exampleFormControlTextarea1">Note médicale</label>

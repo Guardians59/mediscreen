@@ -2,6 +2,7 @@ package com.openclassrooms.msnotes.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,16 +35,16 @@ public class NoteServiceImpl implements INoteService {
     }
 
     @Override
-    public boolean addNoteByPatientId(Note newNote, int patientId) {
+    public boolean addNoteByPatientId(Note newNote, int patientId, String patientName) {
 	logger.debug("Add a note for the patient with id " + patientId);
 	boolean result = false;
 	Note note = new Note();
-	if ((newNote.getPatient().isBlank() || newNote.getPatient() == null) || (newNote.getNote().isBlank()
-		|| newNote.getNote() == null)) {
+	if ((newNote.getNote().isBlank() || newNote.getNote() == null) || (patientId <= 0)
+		|| (patientName.isBlank() || patientName == null)) {
 	    logger.error("An error occurred while adding the note");
 	} else {
 	    note.setPatientId(patientId);
-	    note.setPatient(newNote.getPatient());
+	    note.setPatient(patientName);
 	    note.setNote(newNote.getNote());
 	    noteRepository.insert(note);
 	    result = true;
@@ -51,6 +52,41 @@ public class NoteServiceImpl implements INoteService {
 	}
 
 	return result;
+    }
+
+    @Override
+    public boolean updateNote(String id, Note noteUpdated) {
+	boolean result = false;
+	Optional<Note> optionalNote = noteRepository.findById(id);
+	if (optionalNote.isPresent()) {
+	    Note note = optionalNote.get();
+	    if ((noteUpdated.getNote().isBlank() || noteUpdated.getNote() == null)) {
+		logger.error("Information is missing for the update");
+	    } else {
+		note.setNote(noteUpdated.getNote());
+		noteRepository.save(note);
+		result = true;
+		logger.info("Updated note information");
+	    }
+	} else {
+	    logger.error("An error occurred, no note found with this id " + id);
+	}
+
+	return result;
+    }
+
+    @Override
+    public Note getNoteById(String id) {
+	Optional<Note> optionalNote = noteRepository.findById(id);
+	Note note = new Note();
+	logger.debug("Search the note with id " + id);
+	if (optionalNote.isPresent()) {
+	    note = optionalNote.get();
+	    logger.info("The note have been successfully found");
+	} else {
+	    logger.error("An error occurred, no note found with this id " + id);
+	}
+	return note;
     }
 
 }

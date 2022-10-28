@@ -50,13 +50,12 @@ public class NoteServiceTest {
 	//GIVEN
 	boolean result = false;
 	NoteBean note = new NoteBean();
-	note.setPatient("TestAdd");
 	note.setNote("Test add note service");
 	ResponseEntity resultAdd = Mockito.mock(ResponseEntity.class);
 	Mockito.when(resultAdd.getStatusCode()).thenReturn(HttpStatus.CREATED);
 	//WHEN
-	when(noteProxy.addNote(30, note)).thenReturn(resultAdd);
-	result = noteService.addNote(note, 30);
+	when(noteProxy.addNote(30, "TestAdd", note)).thenReturn(resultAdd);
+	result = noteService.addNote(note, 30, "TestAdd");
 	//THEN
 	assertEquals(result, true);
     }
@@ -66,13 +65,12 @@ public class NoteServiceTest {
 	//GIVEN
 	boolean result;
 	NoteBean note = new NoteBean();
-	note.setPatient("");
-	note.setNote("Test add note service");
+	note.setNote("");
 	ResponseEntity resultAdd = Mockito.mock(ResponseEntity.class);
 	Mockito.when(resultAdd.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
 	//WHEN
-	when(noteProxy.addNote(30, note)).thenReturn(resultAdd);
-	result = noteService.addNote(note, 30);
+	when(noteProxy.addNote(30, "TestErrorAdd", note)).thenReturn(resultAdd);
+	result = noteService.addNote(note, 30, "TestErrorAdd");
 	//THEN
 	assertEquals(result, false);
     }

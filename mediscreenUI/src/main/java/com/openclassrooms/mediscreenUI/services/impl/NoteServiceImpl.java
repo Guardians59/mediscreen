@@ -30,12 +30,12 @@ public class NoteServiceImpl implements INoteService {
     }
 
     @Override
-    public boolean addNote(NoteBean note, int patientId) {
+    public boolean addNote(NoteBean note, int patientId, String patientName) {
 	logger.debug("Add the new note for the patient with id " + patientId);
 	boolean result = false;
 	NoteBean newNote = new NoteBean();
 	newNote = note;
-	ResponseEntity<?> resultAdd = noteProxy.addNote(patientId, newNote);
+	ResponseEntity<?> resultAdd = noteProxy.addNote(patientId, patientName, newNote);
 	if(resultAdd.getStatusCode().value() == 201) {
 	    result = true;
 	    logger.info("Note added with successfully");
@@ -43,6 +43,40 @@ public class NoteServiceImpl implements INoteService {
 	    logger.error("An error occurred while adding to the note");
 	}
 	return result;
+    }
+
+    @Override
+    public int updateNoteById(String id, NoteBean noteUpdated) {
+	logger.debug("Search the note by id " + id);
+	int result = -1;
+	NoteBean note = noteProxy.getNoteById(id);
+	noteUpdated.setPatientId(note.getPatientId());
+	noteUpdated.setPatient(note.getPatient());
+	String noteUpdatedString = noteUpdated.toString();
+	String noteRegisterString = note.toString();
+	if(noteRegisterString.equals(noteUpdatedString)) {
+	    result = 0;
+	    logger.info("No information has been changed");
+	} else {
+	    ResponseEntity<?> resultUpdate = noteProxy.updateNoteById(id, noteUpdated);
+	    if(resultUpdate.getStatusCode().value() == 200) {
+		result = 1;
+		logger.info("Note information has been updated successfully");
+	    }   
+	}
+	return result;
+    }
+
+    @Override
+    public NoteBean getNoteById(String id) {
+	logger.debug("Search the note by id " + id);
+	NoteBean note = noteProxy.getNoteById(id);
+	if(note.getNote() != null) {
+	    logger.info("Note successfully found");
+	} else {
+	    logger.error("No note found");
+	}
+	return note;
     }
 
 }

@@ -49,12 +49,11 @@ public class NoteControllerIT {
     @Test
     public void addNoteTest() throws Exception {
 	Note note = new Note();
-	note.setPatient("TestAdd");
 	note.setNote("Test controller adding the note" );
 	Gson gson = new Gson();
 	String json = gson.toJson(note);
 	
-	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12")
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12?patientName=TestAdd")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))
@@ -65,12 +64,11 @@ public class NoteControllerIT {
     @Test
     public void addNoteErrorTest() throws Exception {
 	Note note = new Note();
-	note.setPatient("");
-	note.setNote("Test controller adding the note" );
+	note.setNote("");
 	Gson gson = new Gson();
 	String json = gson.toJson(note);
 	
-	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12")
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12?patientName=TestErrorAdd")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))

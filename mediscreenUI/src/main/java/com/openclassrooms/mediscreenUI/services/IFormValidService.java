@@ -5,10 +5,12 @@ import com.openclassrooms.mediscreenUI.beans.PatientBean;
 
 public interface IFormValidService {
     
-    public boolean updatePatientFormValid (PatientBean patientUpdated);
+    public boolean updatePatientFormValid(PatientBean patientUpdated);
     
-    public boolean addPatientFormValid (PatientBean newPatient);
+    public boolean addPatientFormValid(PatientBean newPatient);
     
-    public boolean addNoteFormValid (NoteBean newNote);
+    public boolean addNoteFormValid(NoteBean newNote);
+    
+    public boolean updateNoteFormValid(NoteBean noteUpdated);
 
 }

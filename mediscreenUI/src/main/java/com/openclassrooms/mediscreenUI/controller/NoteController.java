@@ -56,12 +56,12 @@ public class NoteController {
     @PostMapping("/note/add/{id}")
     public String addNote(@PathVariable("id") int id, @ModelAttribute NoteBean newNote, Model model) {
 	boolean formValidResult = formValidService.addNoteFormValid(newNote);
+	PatientBean patient = new PatientBean();
+	patient = patientService.getPatientById(id);
 	if (formValidResult == true) {
-	    boolean result = noteService.addNote(newNote, id);
+	    boolean result = noteService.addNote(newNote, id, patient.getLastName());
 	    if (result == true) {
 		List<NoteBean> listNote = noteService.getNoteByPatientId(id);
-		PatientBean patient = new PatientBean();
-		patient = patientService.getPatientById(id);
 		model.addAttribute("patientBean", patient);
 		model.addAttribute("noteBean", listNote);
 		model.addAttribute("name", listNote.get(0));
@@ -69,8 +69,6 @@ public class NoteController {
 			    "Note médicale ajoutée avec succès");
 		return "historiqueNote";
 	    } else {
-		PatientBean patient = new PatientBean();
-		patient = patientService.getPatientById(id);
 		model.addAttribute("patientBean", patient);
 		model.addAttribute("newNote", newNote);
 		model.addAttribute("addError",
@@ -78,13 +76,72 @@ public class NoteController {
 		return "addNote";
 	    }
 	}
-	PatientBean patient = new PatientBean();
-	patient = patientService.getPatientById(id);
 	model.addAttribute("patientBean", patient);
 	model.addAttribute("newNote", newNote);
 	model.addAttribute("addError",
 		    "Vérifier à remplir toutes les informations nécessaires");
 	return "addNote";
+    }
+    
+    @GetMapping("/note/update/{id}")
+    public String updateNoteByIdPage(@PathVariable("id") String id, Model model) {
+	NoteBean noteBean = new NoteBean();
+	noteBean = noteService.getNoteById(id);
+	if(noteBean.getNote() != null) {
+	    model.addAttribute("noteBean", noteBean);
+	    PatientBean patient = new PatientBean();
+	    patient = patientService.getPatientById(noteBean.getPatientId());
+	    model.addAttribute("patientBean", patient);
+	    return "updateNote";
+	} else {
+	    return "historiqueNote";
+	}
+    }
+    
+    @PostMapping("/note/update/{id}")
+    public String updateNoteById(@PathVariable("id") String id, @ModelAttribute NoteBean noteUpdated, Model model) {
+	boolean formResult = formValidService.updateNoteFormValid(noteUpdated);
+	int idPatient = noteService.getNoteById(id).getPatientId();
+	if(formResult == true) {
+	    int result = noteService.updateNoteById(id, noteUpdated);
+	    if(result == 1) {
+		List<NoteBean> listNote = noteService.getNoteByPatientId(idPatient);
+		PatientBean patient = new PatientBean();
+		patient = patientService.getPatientById(idPatient);
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("noteBean", listNote);
+		model.addAttribute("name", listNote.get(0));
+		model.addAttribute("updateSuccess",
+			    "Note médicale mise à jour avec succès");
+		return "historiqueNote";
+	    } else if(result == 0) {
+		List<NoteBean> listNote = noteService.getNoteByPatientId(idPatient);
+		PatientBean patient = new PatientBean();
+		patient = patientService.getPatientById(idPatient);
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("noteBean", listNote);
+		model.addAttribute("name", listNote.get(0));
+		model.addAttribute("noUpdate",
+			    "Aucune information de la note n'a été modifié");
+		return "historiqueNote";
+	    } else {
+		PatientBean patient = new PatientBean();
+		patient = patientService.getPatientById(idPatient);
+		model.addAttribute("patientBean", patient);
+		model.addAttribute("noteBean", noteUpdated);
+		model.addAttribute("updateError",
+			    "Une erreur est survenue, veuillez réessayer");
+		return "updateNote";
+	    }
+	} else {
+	    PatientBean patient = new PatientBean();
+	    patient = patientService.getPatientById(idPatient);
+	    model.addAttribute("patientBean", patient);
+	    model.addAttribute("noteBean", noteUpdated);
+	    model.addAttribute("updateInfosError",
+		    "Vérifier à remplir toutes les informations nécessaires");
+	    return "updateNote";
+	}
     }
 
 }

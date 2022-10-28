@@ -113,7 +113,6 @@ public class NoteControllerTest {
     public void addNoteTest() throws Exception {
 	//GIVEN
 	NoteBean note = new NoteBean();
-	note.setPatient("TestAdd");
 	note.setNote("Test add note service");
 	ResponseEntity resultAdd = Mockito.mock(ResponseEntity.class);
 	Mockito.when(resultAdd.getStatusCode()).thenReturn(HttpStatus.CREATED);
@@ -128,9 +127,9 @@ public class NoteControllerTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	//WHEN
-	when(noteProxy.addNote(30, note)).thenReturn(resultAdd);
+	when(noteProxy.addNote(30, "TestAddNote", note)).thenReturn(resultAdd);
 	when(formValidService.addNoteFormValid(note)).thenReturn(true);
-	when(noteService.addNote(note, 30)).thenReturn(true);
+	when(noteService.addNote(note, 30, "TestAddNote")).thenReturn(true);
 	when(noteService.getNoteByPatientId(30)).thenReturn(list);
 	when(patientService.getPatientById(30)).thenReturn(patient);
 	//THEN
@@ -145,8 +144,7 @@ public class NoteControllerTest {
     public void addNoteErrorTest() throws Exception {
 	//GIVEN
 	NoteBean note = new NoteBean();
-	note.setPatient("");
-	note.setNote("Test add note service");
+	note.setNote("");
 	PatientBean patient = new PatientBean();
 	patient.setId(31);
 	patient.setFirstName("Test");
@@ -157,7 +155,7 @@ public class NoteControllerTest {
 	patient.setPhoneNumber("032536");
 	//WHEN
 	when(formValidService.addNoteFormValid(note)).thenReturn(false);
-	when(noteService.addNote(note, 31)).thenReturn(false);
+	when(noteService.addNote(note, 31, "TestAddErrorNote")).thenReturn(false);
 	when(patientService.getPatientById(31)).thenReturn(patient);
 	//THEN
 	mockMvc.perform(post("/note/add/31")

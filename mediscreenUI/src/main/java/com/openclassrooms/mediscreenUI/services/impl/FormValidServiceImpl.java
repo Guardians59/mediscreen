@@ -37,8 +37,16 @@ public class FormValidServiceImpl implements IFormValidService {
     @Override
     public boolean addNoteFormValid(NoteBean newNote) {
 	boolean result = true;
-	if ((newNote.getPatient() == null || newNote.getPatient().isBlank())
-		|| (newNote.getNote() == null || newNote.getNote().isBlank())) {
+	if ((newNote.getNote() == null || newNote.getNote().isBlank())) {
+	    result = false;
+	}
+	return result;
+    }
+
+    @Override
+    public boolean updateNoteFormValid(NoteBean noteUpdated) {
+	boolean result = true;
+	if ((noteUpdated.getNote() == null || noteUpdated.getNote().isBlank())) {
 	    result = false;
 	}
 	return result;
