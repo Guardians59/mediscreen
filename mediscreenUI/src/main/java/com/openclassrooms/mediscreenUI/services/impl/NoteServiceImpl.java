@@ -50,6 +50,7 @@ public class NoteServiceImpl implements INoteService {
 	logger.debug("Search the note by id " + id);
 	int result = -1;
 	NoteBean note = noteProxy.getNoteById(id);
+	noteUpdated.setId(id);
 	noteUpdated.setPatientId(note.getPatientId());
 	noteUpdated.setPatient(note.getPatient());
 	String noteUpdatedString = noteUpdated.toString();
