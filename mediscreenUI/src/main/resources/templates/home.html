@@ -35,6 +35,9 @@
 	<div th:if="${deleteSuccess}">
 			<p style="color: green;" th:text="${deleteSuccess}" align="center"></p>
 		</div>
+	<div th:if="${updateError}">
+			<p style="color: red;" th:text="${updateError}" align="center"></p>
+		</div>
 				<div class="text-center">
 				<a th:href="@{/patient/add}">
 			 		<button type="button" class="btn btn-dark">Ajouter un patient</button>
@@ -45,7 +48,5 @@
 				</div>
 			</div>
 	</div>
-
-
 </body>
 </html>

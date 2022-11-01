@@ -94,7 +94,9 @@ public class NoteController {
 	    model.addAttribute("patientBean", patient);
 	    return "updateNote";
 	} else {
-	    return "historiqueNote";
+	    model.addAttribute("updateError",
+		    "Une erreur est survenue, veuillez réessayer");
+	    return "home";
 	}
     }
     

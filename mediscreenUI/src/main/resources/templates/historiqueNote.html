@@ -57,11 +57,11 @@
 			<p style="color: black;" th:text="${noUpdate}" align="center"></p>
 		</div>
 
-		<table class="table border-custom" th:object="${noteBean}">
+		<table class="table table-bordered border-custom" th:object="${noteBean}">
 			<thead class="thead-dark text-center">
 				<tr>
 					<th scope="col">Note</th>
-					<th scope="col">Option</th>
+					<th scope="col" class="col-1">Option</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -69,7 +69,7 @@
 					<th scope="row" th:text="${n.note}"></th>
 					<td>
 					<a th:href="@{/note/update/{id}(id=${n.id})}">
-						<button type="button" class="btn btn-dark">Modifier</button>
+						<button type="button" class="btn btn-dark text-center">Modifier</button>
 						</a>
 					</td>
 				</tr>
@@ -80,6 +80,9 @@
 			<div class="text-center">
 			  <a th:href="@{/note/add/{id}(id=${patientBean.id})}">
 				<button class="btn btn-dark" type="button">Ajouter une note</button>
+			  </a>
+			  <a th:href="@{/patient/getPatient/{id}(id=${patientBean.id})}">
+			 		<button type="button" class="btn btn-dark cancel-button">Informations du patient</button>
 			  </a>
 
 			</div>

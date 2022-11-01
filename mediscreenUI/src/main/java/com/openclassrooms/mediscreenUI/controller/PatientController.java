@@ -37,6 +37,9 @@ public class PatientController {
 	if (patientInfos.getGender() != null) {
 	    return "getPatient";
 	} else {
+	    GetPatientModel patientModel = new GetPatientModel();
+	    model.addAttribute("getPatientModel", patientModel);
+	    model.addAttribute("searchError", "Une erreur est survenue lors de la recherche du patient, vérifiez les informations renseignées");
 	    return "searchPatient";
 	}
     }
@@ -50,6 +53,8 @@ public class PatientController {
 	if (patientInfos.getGender() != null) {
 	    return "getPatient";
 	} else {
+	    GetPatientModel patientModel = new GetPatientModel();
+	    model.addAttribute("getPatientModel", patientModel);
 	    return "searchPatient";
 	}
     }
@@ -71,6 +76,7 @@ public class PatientController {
 	    model.addAttribute("patientBean", patientBean);
 	    return "updatePatient";
 	} else {
+	    model.addAttribute("patientBean", patientBean);
 	    return "getPatient";
 	}
     }
@@ -119,10 +125,13 @@ public class PatientController {
 		model.addAttribute("addSuccess", "Le patient à été ajouté avec succès");
 		return "getPatient";
 	    } else {
+		PatientBean patient = new PatientBean();
+		model.addAttribute("newPatient", patient);
+		model.addAttribute("addError", "Une erreur est survenue, veuillez réessayer");
 		return "addPatient";
 	    }
 	} else {
-	    model.addAttribute("addError",
+	    model.addAttribute("addInfosError",
 		    "Vérifier à remplir toutes les informations nécessaires, seul l'adresse et le téléphone peuvent ne pas être renseignés");
 	    return "addPatient";
 	}
