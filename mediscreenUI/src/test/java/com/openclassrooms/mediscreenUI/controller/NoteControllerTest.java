@@ -110,6 +110,25 @@ public class NoteControllerTest {
     }
     
     @Test
+    public void getPageAddNoteTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	patient.setId(31);
+	patient.setFirstName("Test");
+	patient.setLastName("TestNote");
+	patient.setGender("M");
+	patient.setBirthday("1980-10-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	//WHEN
+	when(patientService.getPatientById(31)).thenReturn(patient);
+	//THEN
+	mockMvc.perform(get("/note/add/31")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(view().name("addNote"));
+    }
+    
+    @Test
     public void addNoteTest() throws Exception {
 	//GIVEN
 	NoteBean note = new NoteBean();
@@ -141,7 +160,7 @@ public class NoteControllerTest {
     }
     
     @Test
-    public void addNoteErrorTest() throws Exception {
+    public void addNoteInfosErrorTest() throws Exception {
 	//GIVEN
 	NoteBean note = new NoteBean();
 	note.setNote("");
@@ -163,6 +182,55 @@ public class NoteControllerTest {
 		.flashAttr("noteBean", note))
 		.andExpect(model().attributeExists("addError"))
 		.andExpect(view().name("addNote"));
+    }
+    
+    @Test
+    public void addNoteErrorTest() throws Exception {
+	//GIVEN
+	NoteBean note = new NoteBean();
+	note.setNote("Test Error");
+	PatientBean patient = new PatientBean();
+	patient.setId(31);
+	patient.setFirstName("Test");
+	patient.setLastName("TestAddErrorNote");
+	patient.setGender("M");
+	patient.setBirthday("1980-10-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	//WHEN
+	when(formValidService.addNoteFormValid(note)).thenReturn(true);
+	when(noteService.addNote(note, 31, "TestAddErrorNote")).thenReturn(false);
+	when(patientService.getPatientById(31)).thenReturn(patient);
+	//THEN
+	mockMvc.perform(post("/note/add/31")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.flashAttr("noteBean", note))
+		.andExpect(model().attributeExists("addError"))
+		.andExpect(view().name("addNote"));
+    }
+    
+    @Test
+    public void getPageUpdateNoteByIdTest() throws Exception {
+	NoteBean note = new NoteBean();
+	note.setId("634d7ac0b14dfa6be13e4277");
+	note.setPatientId(17);
+	note.setPatient("TestGetPageUpdateNote");
+	note.setNote("Test get page update note by id");
+	PatientBean patient = new PatientBean();
+	patient.setId(17);
+	patient.setFirstName("Test");
+	patient.setLastName("TestGetPageUpdateNote");
+	patient.setGender("M");
+	patient.setBirthday("1980-10-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	
+	when(noteService.getNoteById("634d7ac0b14dfa6be13e4277")).thenReturn(note);
+	when(patientService.getPatientById(17)).thenReturn(patient);
+	
+	mockMvc.perform(get("/note/update/634d7ac0b14dfa6be13e4277")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(view().name("updateNote"));
     }
     
     @Test
@@ -262,6 +330,39 @@ public class NoteControllerTest {
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.flashAttr("noteBean", noteUpdated))
 		.andExpect(model().attributeExists("updateInfosError"))
+		.andExpect(view().name("updateNote"));
+    }
+    
+    @Test
+    public void updateNoteByIdErrorTest() throws Exception {
+	//GIVEN
+	NoteBean note = new NoteBean();
+	note.setId("634d7ac0b14dfa6be13e4200");
+	note.setPatientId(40);
+	note.setPatient("TestUpdateNote");
+	note.setNote("Test update controller");
+	List<NoteBean> list = new ArrayList<>();
+	list.add(note);
+	NoteBean noteUpdated = new NoteBean();
+	noteUpdated.setNote("Test error");
+	PatientBean patient = new PatientBean();
+	patient.setId(40);
+	patient.setFirstName("Test");
+	patient.setLastName("TestUpdateNote");
+	patient.setGender("M");
+	patient.setBirthday("1980-10-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	//WHEN
+	when(formValidService.updateNoteFormValid(noteUpdated)).thenReturn(true);
+	when(noteService.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated)).thenReturn(-1);
+	when(noteService.getNoteById("634d7ac0b14dfa6be13e4200")).thenReturn(note);
+	when(patientService.getPatientById(40)).thenReturn(patient);
+	//THEN
+	mockMvc.perform(post("/note/update/634d7ac0b14dfa6be13e4200")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.flashAttr("noteBean", noteUpdated))
+		.andExpect(model().attributeExists("updateError"))
 		.andExpect(view().name("updateNote"));
     }
 

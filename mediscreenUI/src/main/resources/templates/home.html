@@ -35,6 +35,9 @@
 	<div th:if="${deleteSuccess}">
 			<p style="color: green;" th:text="${deleteSuccess}" align="center"></p>
 		</div>
+	<div th:if="${onlyDeletePatient}">
+			<p style="color: black;" th:text="${onlyDeletePatient}" align="center"></p>
+		</div>
 	<div th:if="${updateError}">
 			<p style="color: red;" th:text="${updateError}" align="center"></p>
 		</div>

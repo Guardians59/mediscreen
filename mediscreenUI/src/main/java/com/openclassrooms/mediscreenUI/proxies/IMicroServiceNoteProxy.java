@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,5 +29,8 @@ public interface IMicroServiceNoteProxy {
 
     @GetMapping(value = "/note/get/{id}")
     NoteBean getNoteById(@PathVariable("id") String id);
+    
+    @DeleteMapping(value = "/note/patientId/{id}")
+    ResponseEntity<?> deleteNoteByPatientId(@PathVariable("id") int id);
 
 }

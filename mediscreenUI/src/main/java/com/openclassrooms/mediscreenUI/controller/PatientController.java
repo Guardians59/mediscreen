@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.models.GetPatientModel;
 import com.openclassrooms.mediscreenUI.services.IFormValidService;
+import com.openclassrooms.mediscreenUI.services.INoteService;
 import com.openclassrooms.mediscreenUI.services.IPatientService;
 
 @Controller
@@ -18,6 +19,9 @@ public class PatientController {
 
     @Autowired
     IPatientService patientService;
+
+    @Autowired
+    INoteService noteService;
 
     @Autowired
     IFormValidService formValid;
@@ -39,7 +43,8 @@ public class PatientController {
 	} else {
 	    GetPatientModel patientModel = new GetPatientModel();
 	    model.addAttribute("getPatientModel", patientModel);
-	    model.addAttribute("searchError", "Une erreur est survenue lors de la recherche du patient, vérifiez les informations renseignées");
+	    model.addAttribute("searchError",
+		    "Une erreur est survenue lors de la recherche du patient, vérifiez les informations renseignées");
 	    return "searchPatient";
 	}
     }
@@ -136,25 +141,34 @@ public class PatientController {
 	    return "addPatient";
 	}
     }
-    
+
     @GetMapping("/patient/delete/confirm/{id}")
     public String deletePatientPage(@PathVariable("id") int id, Model model) {
 	PatientBean patient = patientService.getPatientById(id);
 	model.addAttribute("patientBean", patient);
 	return "deletePatient";
     }
-    
+
     @GetMapping("/patient/delete/{id}")
     public String deletePatient(@PathVariable("id") int id, Model model) {
 	boolean result = patientService.deletePatient(id);
 	if (result == true) {
-	    model.addAttribute("deleteSuccess", "Le patient à été supprimé avec succès");
+	    boolean deleteNote = noteService.deleteNoteByPatientId(id);
+	    if (deleteNote == true) {
+		model.addAttribute("deleteSuccess",
+			"Le patient et son historique médical ont été supprimés avec succès");
+		return "home";
+	    } else {
+	    model.addAttribute("onlyDeletePatient",
+		    "Le patient à été supprimé avec succès, mais une erreur est survenue lors de la tentative de suppression de son historique medical");
 	    return "home";
+	    }
 	} else {
 	    PatientBean patient = patientService.getPatientById(id);
 	    model.addAttribute("patientBean", patient);
-	    model.addAttribute("deleteError", "Une erreur est survenue lors de la tentative de suppression du patient, veuillez réessayer");
+	    model.addAttribute("deleteError",
+		    "Une erreur est survenue lors de la tentative de suppression du patient, veuillez réessayer");
 	    return "deletePatient";
 	}
-	}
     }
+}

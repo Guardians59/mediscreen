@@ -13,5 +13,7 @@ public interface INoteService {
     public int updateNoteById(String id, NoteBean noteUpdated);
     
     public NoteBean getNoteById(String id);
+    
+    public boolean deleteNoteByPatientId(int patientId);
 
 }

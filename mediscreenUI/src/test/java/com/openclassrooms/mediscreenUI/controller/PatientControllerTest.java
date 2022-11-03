@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.models.GetPatientModel;
+import com.openclassrooms.mediscreenUI.proxies.IMicroServiceNoteProxy;
 import com.openclassrooms.mediscreenUI.proxies.IMicroServicePatientProxy;
 import com.openclassrooms.mediscreenUI.services.IFormValidService;
 import com.openclassrooms.mediscreenUI.services.IPatientService;
@@ -41,6 +42,9 @@ public class PatientControllerTest {
 
     @MockBean
     IMicroServicePatientProxy microServicePatientProxyMock;
+    
+    @MockBean
+    IMicroServiceNoteProxy microServiceNoteProxyMock;
 
     @MockBean
     IPatientService patientService;
@@ -117,6 +121,30 @@ public class PatientControllerTest {
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.flashAttr("getPatientModel", patientModel))
 		.andExpect(view().name("getPatient"))
+		.andExpect(status().isOk());
+    }
+    
+    @Test
+    public void getPatientErrorTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	HashMap<String, Object> mapParams = new HashMap<>();
+	mapParams.put("firstName", "Test");
+	mapParams.put("lastName", "TestError");
+	mapParams.put("birthday", "1980-10-20");
+	GetPatientModel patientModel = new GetPatientModel();
+	patientModel.setFirstName("Test");
+	patientModel.setLastName("TestError");
+	patientModel.setBirthday("1980-10-20");
+	//WHEN
+	when(microServicePatientProxyMock.getPatient(mapParams)).thenReturn(patient);
+	when(patientService.getPatient("Test", "TestError", "1980-10-20")).thenReturn(patient);
+	//THEN
+	mockMvc.perform(post("/patient/getPatient")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.flashAttr("getPatientModel", patientModel))
+		.andExpect(model().attributeExists("searchError"))
+		.andExpect(view().name("searchPatient"))
 		.andExpect(status().isOk());
     }
     
@@ -293,7 +321,7 @@ public class PatientControllerTest {
     }
     
     @Test
-    public void addPatientErrorTest() throws Exception {
+    public void addPatientInfosErrorTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
 	patient.setId(50);
@@ -315,18 +343,25 @@ public class PatientControllerTest {
     }
     
     @Test
-    public void deletePatientTest() throws Exception {
+    public void addPatientErrorTest() throws Exception {
 	//GIVEN
-	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
-	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	PatientBean patient = new PatientBean();
+	patient.setId(50);
+	patient.setFirstName("Test");
+	patient.setLastName("TestAddController");
+	patient.setGender("M");
+	patient.setBirthday("1985-08-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
 	//WHEN
-	when(microServicePatientProxyMock.deletePatient(70)).thenReturn(resultDelete);
-	when(patientService.deletePatient(70)).thenReturn(true);
+	when(formValidService.addPatientFormValid(patient)).thenReturn(true);
+	when(patientService.addPatient(patient)).thenReturn(false);
 	//THEN
-	mockMvc.perform(get("/patient/delete/70")
-		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
-		.andExpect(model().attributeExists("deleteSuccess"))
-		.andExpect(view().name("home"));
+	mockMvc.perform(post("/patient/add")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		.flashAttr("newPatient", patient))
+		.andExpect(model().attributeExists("addError"))
+		.andExpect(view().name("addPatient"));
 	
     }
     
@@ -334,9 +369,9 @@ public class PatientControllerTest {
     public void deletePatientErrorTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
-	patient.setId(71);
+	patient.setId(70);
 	patient.setFirstName("Test");
-	patient.setLastName("TestAddController");
+	patient.setLastName("TestDeleteError");
 	patient.setGender("M");
 	patient.setBirthday("1985-08-20");
 	patient.setAddress("2 rue test");
@@ -344,14 +379,67 @@ public class PatientControllerTest {
 	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
 	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
 	//WHEN
-	when(microServicePatientProxyMock.deletePatient(71)).thenReturn(resultDelete);
-	when(patientService.deletePatient(71)).thenReturn(false);
-	when(patientService.getPatientById(71)).thenReturn(patient);
+	when(microServicePatientProxyMock.deletePatient(70)).thenReturn(resultDelete);
+	when(microServiceNoteProxyMock.deleteNoteByPatientId(70)).thenReturn(resultDelete);
+	when(patientService.deletePatient(70)).thenReturn(false);
+	when(patientService.getPatientById(70)).thenReturn(patient);
 	//THEN
-	mockMvc.perform(get("/patient/delete/71")
+	mockMvc.perform(get("/patient/delete/70")
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
 		.andExpect(model().attributeExists("deleteError"))
 		.andExpect(view().name("deletePatient"));
+	
+    }
+    
+    @Test
+    public void deletePatientTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	patient.setId(71);
+	patient.setFirstName("Test");
+	patient.setLastName("TestDelete");
+	patient.setGender("M");
+	patient.setBirthday("1985-08-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(71)).thenReturn(resultDelete);
+	when(microServiceNoteProxyMock.deleteNoteByPatientId(71)).thenReturn(resultDelete);
+	when(patientService.deletePatient(71)).thenReturn(true);
+	//THEN
+	mockMvc.perform(get("/patient/delete/71")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(model().attributeExists("deleteSuccess"))
+		.andExpect(view().name("home"));
+	
+    }
+    
+    @Test
+    public void deleteOnlyPatientTest() throws Exception {
+	//GIVEN
+	PatientBean patient = new PatientBean();
+	patient.setId(71);
+	patient.setFirstName("Test");
+	patient.setLastName("TestDelete");
+	patient.setGender("M");
+	patient.setBirthday("1985-08-20");
+	patient.setAddress("2 rue test");
+	patient.setPhoneNumber("032536");
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	ResponseEntity resultDeleteNote = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDeleteNote.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
+	//WHEN
+	when(microServicePatientProxyMock.deletePatient(71)).thenReturn(resultDelete);
+	when(microServiceNoteProxyMock.deleteNoteByPatientId(71)).thenReturn(resultDeleteNote);
+	when(patientService.deletePatient(71)).thenReturn(true);
+	//THEN
+	mockMvc.perform(get("/patient/delete/71")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED))
+		.andExpect(model().attributeExists("onlyDeletePatient"))
+		.andExpect(view().name("home"));
 	
     }
     

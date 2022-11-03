@@ -86,14 +86,35 @@ public class NoteServiceTest {
 	note.setNote("Test update");
 	NoteBean noteUpdated = new NoteBean();
 	noteUpdated.setNote("Test Note updated");
-	ResponseEntity resultAdd = Mockito.mock(ResponseEntity.class);
-	Mockito.when(resultAdd.getStatusCode()).thenReturn(HttpStatus.OK);
+	ResponseEntity resultUpdate = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultUpdate.getStatusCode()).thenReturn(HttpStatus.OK);
 	//WHEN
 	when(noteProxy.getNoteById("634d7ac0b14dfa6be13e4200")).thenReturn(note);
-	when(noteProxy.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated)).thenReturn(resultAdd);
+	when(noteProxy.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated)).thenReturn(resultUpdate);
 	result = noteService.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated);
 	//THEN
 	assertEquals(result, 1);
+    }
+    
+    @Test
+    public void updateNoteByIdErrorTest() {
+	//GIVEN
+	int result =-1;
+	NoteBean note = new NoteBean();
+	note.setId("634d7ac0b14dfa6be13e4200");
+	note.setPatientId(30);
+	note.setPatient("TestUpdate");
+	note.setNote("Test update");
+	NoteBean noteUpdated = new NoteBean();
+	noteUpdated.setNote("Test Note updated");
+	ResponseEntity resultUpdate = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultUpdate.getStatusCode()).thenReturn(HttpStatus.NOT_FOUND);
+	//WHEN
+	when(noteProxy.getNoteById("634d7ac0b14dfa6be13e4200")).thenReturn(note);
+	when(noteProxy.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated)).thenReturn(resultUpdate);
+	result = noteService.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated);
+	//THEN
+	assertEquals(result, -1);
     }
     
     @Test
@@ -115,6 +136,42 @@ public class NoteServiceTest {
 	result = noteService.updateNoteById("634d7ac0b14dfa6be13e4200", noteUpdated);
 	//THEN
 	assertEquals(result, 0);
+    }
+    
+    @Test
+    public void getNoteByIdTest() {
+	//GIVEN
+	NoteBean note = new NoteBean();
+	note.setId("634d7ac0b14dfa6be13e4235");
+	note.setPatientId(35);
+	note.setPatient("TestGet");
+	note.setNote("Test get by id");
+	NoteBean noteTest = new NoteBean();
+	//WHEN
+	when(noteProxy.getNoteById("634d7ac0b14dfa6be13e4235")).thenReturn(note);
+	noteTest = noteService.getNoteById("634d7ac0b14dfa6be13e4235");
+	//THEN
+	assertEquals(noteTest, note);
+    }
+    
+    @Test
+    public void deleteNoteTest() {
+	//GIVEN
+	boolean result;
+	NoteBean note = new NoteBean();
+	note.setId("634d7ac0b14dfa6be13e4235");
+	note.setPatientId(45);
+	note.setPatient("TestDelete");
+	note.setNote("Test delete by id patient");
+	List<NoteBean> list = new ArrayList<>();
+	list.add(note);
+	ResponseEntity resultDelete = Mockito.mock(ResponseEntity.class);
+	Mockito.when(resultDelete.getStatusCode()).thenReturn(HttpStatus.OK);
+	//WHEN
+	when(noteProxy.deleteNoteByPatientId(45)).thenReturn(resultDelete);
+	result = noteService.deleteNoteByPatientId(45);
+	//THEN
+	assertEquals(result, true);
     }
 
 }
