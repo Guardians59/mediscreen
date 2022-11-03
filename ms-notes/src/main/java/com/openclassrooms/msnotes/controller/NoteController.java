@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.msnotes.controller.exception.ErrorAddNote;
+import com.openclassrooms.msnotes.controller.exception.ErrorDeleteNote;
 import com.openclassrooms.msnotes.controller.exception.ErrorGetNote;
 import com.openclassrooms.msnotes.controller.exception.ErrorUpdateNote;
 import com.openclassrooms.msnotes.model.Note;
@@ -27,19 +29,19 @@ public class NoteController {
     @Autowired
     INoteService noteService;
     
-    @ApiOperation(value = "Recupere les notes des medecins sur un patient via son id.")
+    @ApiOperation(value = "Recupere les notes medicales sur un patient via son id.")
     @GetMapping("/note/getByPatientId/{id}")
     public List<Note> getNoteByPatientId(@PathVariable("id") int id) {
 	List<Note> result = noteService.getNoteByPatientId(id);
 	return result;
     }
-    @ApiOperation(value = "Envoie au proxy les notes des medecins sur un patient via son id.")
+    @ApiOperation(value = "Envoie au proxy les notes medicales sur un patient via son id.")
     @PostMapping("/note/getByPatientId/{id}")
     public List<Note> getNoteByPatientIdProxy(@PathVariable("id") int id) {
 	List<Note> result = noteService.getNoteByPatientId(id);
 	return result;
     }
-    @ApiOperation(value = "Ajoute une note de medecin sur un patient.")
+    @ApiOperation(value = "Ajoute une note de medicale sur un patient.")
     @PostMapping("/note/add/{id}")
     public ResponseEntity<?> addNote(@PathVariable("id") int id, @RequestParam String patientName, @RequestBody Note newNote) {
 	boolean result = noteService.addNoteByPatientId(newNote, id, patientName);
@@ -49,7 +51,7 @@ public class NoteController {
 	    return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
     }
-    @ApiOperation(value = "Mets à jour une note de medecin sur un patient via l'id de la note.")
+    @ApiOperation(value = "Mets à jour une note medicale sur un patient via l'id de la note.")
     @PutMapping("/note/update/{id}")
     public ResponseEntity<?> updateNoteById(@PathVariable("id") String id, @RequestBody Note noteUpdated) {
 	boolean result = noteService.updateNote(id, noteUpdated);
@@ -59,7 +61,7 @@ public class NoteController {
 	    return ResponseEntity.status(HttpStatus.OK).build();
 	}
     }
-    
+    @ApiOperation(value = "Recupere une note medicale via l'id.")
     @GetMapping("/note/get/{id}")
     public Note getNoteById(@PathVariable("id") String id) {
 	Note note = noteService.getNoteById(id);
@@ -67,6 +69,26 @@ public class NoteController {
 	    throw new ErrorGetNote("An error occured while searching the note");
 	} else {
 	    return note;
+	}
+    }
+    @ApiOperation(value = "Envoie au proxy une note medicale via l'id.")
+    @PostMapping("/note/get/{id}")
+    public Note getNoteByIdProxy(@PathVariable("id") String id) {
+	Note note = noteService.getNoteById(id);
+	if(note.getPatient() == null) {
+	    throw new ErrorGetNote("An error occured while searching the note");
+	} else {
+	    return note;
+	}
+    }
+    @ApiOperation(value = "Supprime les notes medicales d'un patient via son id.")
+    @DeleteMapping("/note/patientId/{id}")
+    public ResponseEntity<?> deleteNoteByPatientId(@PathVariable("id") int id) {
+	boolean result = noteService.deleteByPatientId(id);
+	if(result == false) {
+	    throw new ErrorDeleteNote("An error occured while searching the note");
+	} else {
+	    return ResponseEntity.status(HttpStatus.OK).build();
 	}
     }
 

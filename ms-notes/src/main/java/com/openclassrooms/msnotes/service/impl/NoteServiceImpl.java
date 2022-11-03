@@ -89,4 +89,28 @@ public class NoteServiceImpl implements INoteService {
 	return note;
     }
 
+    @Override
+    public boolean deleteByPatientId(int patientId) {
+	logger.debug("Search doctors notes for patient with id " + patientId);
+	boolean result = false;
+	List<Note> list = new ArrayList<>();
+	list = noteRepository.findByPatientId(patientId);
+	if(list.isEmpty()) {
+	    logger.info("No doctor's note found for this patient");
+	    result = true;
+	} else {
+	    String id = list.get(0).getId();
+	    noteRepository.deleteAll(list);
+	    boolean noteDelete = noteRepository.existsById(id);
+	    if(noteDelete == false) {
+		logger.info("The notes corresponding to the patient with the id " + patientId
+			    + " have been successfully deleted");
+		result = true;
+	    } else {
+		logger.error("An error occurred while deleting notes");
+	    }
+	}
+	return result;
+    }
+
 }
