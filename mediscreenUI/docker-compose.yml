@@ -17,6 +17,17 @@ services:
     volumes:
       - mediscreendb:/var/lib/mysql
       
+  mongo:
+     image: mongo:latest
+     container_name: mongoDB
+     restart: always
+     ports:
+       - '33017:33017'
+     networks:
+       - mediscreen-network
+     volumes:
+       - mediscreendb:/var/lib/mongo
+      
   patient:
     depends_on:
      - db
@@ -31,6 +42,17 @@ services:
     restart: always
     networks:
       - mediscreen-network
+      
+  note:
+    depends_on:
+     - mongo
+    image: ms-note-image
+    container_name: ms-note
+    ports:
+     - 8082:8082
+    restart: always
+    networks:
+     - mediscreen-network
       
 networks:
   mediscreen-network:
