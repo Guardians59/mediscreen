@@ -1,0 +1,11 @@
+HemoglobinA1C
+Microalbumin
+Height
+Weight
+Smoker
+Abnormal
+Cholesterol
+Dizziness
+Relapse
+Reaction
+Antibody
