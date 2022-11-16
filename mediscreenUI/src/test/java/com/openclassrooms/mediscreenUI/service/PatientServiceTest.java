@@ -3,7 +3,9 @@ package com.openclassrooms.mediscreenUI.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -185,6 +187,45 @@ public class PatientServiceTest {
 	result = patientService.deletePatient(61);
 	//THEN
 	assertEquals(result, false);
+    }
+    
+    @Test
+    public void getAllByNameTest() {
+	//GIVEN
+	List<PatientBean> listPatient = new ArrayList<>();
+	PatientBean patient1 = new PatientBean();
+	patient1.setId(50);
+	patient1.setFirstName("TestFamily");
+	patient1.setLastName("TestFamilyName");
+	patient1.setGender("F");
+	patient1.setBirthday("1980-02-10");
+	listPatient.add(patient1);
+	PatientBean patient2 = new PatientBean();
+	patient2.setId(51);
+	patient2.setFirstName("TestFamilyBis");
+	patient2.setLastName("TestFamilyName");
+	patient2.setGender("M");
+	patient2.setBirthday("1978-04-10");
+	listPatient.add(patient2);
+	List<PatientBean> list = new ArrayList<>();
+	//WHEN
+	when(microServicePatientProxyMock.getAllByName("TestFamilyName")).thenReturn(listPatient);
+	list = patientService.getAllByName("TestFamilyName");
+	//THEN
+	assertEquals(list.size(), 2);
+    }
+    
+    @Test
+    public void getAllByNameErrorTest() {
+	//GIVEN
+	List<PatientBean> listPatient = new ArrayList<>();
+	List<PatientBean> list = new ArrayList<>();
+	//WHEN
+	when(microServicePatientProxyMock.getAllByName("TestFamilyName")).thenReturn(listPatient);
+	list = patientService.getAllByName("TestFamilyName");
+	//THEN
+	assertEquals(list.size(), 0);
+	
     }
 
 }

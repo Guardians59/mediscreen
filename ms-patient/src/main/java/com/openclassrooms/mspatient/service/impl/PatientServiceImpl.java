@@ -1,5 +1,7 @@
 package com.openclassrooms.mspatient.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -118,6 +120,19 @@ public class PatientServiceImpl implements IPatientService {
 	    logger.info("Patient deleted with success");
 	} else {
 	    logger.error("An error occured, no patient found with id : " + id);
+	}
+	return result;
+    }
+
+    @Override
+    public List<Patient> getAllByName(String lastName) {
+	List<Patient> result = new ArrayList<>();
+	result = patientRepository.findAllPatientByName(lastName);
+	logger.debug("Search patient with lastName : " + lastName);
+	if(!result.isEmpty()) {
+	    logger.info("Patients successfully found");
+	} else {
+	    logger.error("No patients found");
 	}
 	return result;
     }

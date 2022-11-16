@@ -1,5 +1,7 @@
 package com.openclassrooms.mediscreenUI.services;
 
+import java.util.List;
+
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 
 public interface IPatientService {
@@ -13,5 +15,7 @@ public interface IPatientService {
     public boolean addPatient(PatientBean newPatient);
     
     public boolean deletePatient(int id);
+    
+    public List<PatientBean> getAllByName(String lastName);
 
 }

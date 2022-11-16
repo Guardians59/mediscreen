@@ -1,5 +1,7 @@
 package com.openclassrooms.mspatient.service;
 
+import java.util.List;
+
 import com.openclassrooms.mspatient.model.Patient;
 
 public interface IPatientService {
@@ -14,4 +16,5 @@ public interface IPatientService {
     
     public boolean deletePatient(int id);
 
+    public List<Patient> getAllByName(String lastName);
 }

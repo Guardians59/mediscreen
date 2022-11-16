@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -126,6 +128,7 @@ public class PatientServiceTest {
     
     @Test
     public void addPatientErrorTest() {
+	//GIVEN
 	Patient patient = new Patient();
 	patient.setFirstName("Test");
 	patient.setLastName("ServiceTest2");
@@ -136,6 +139,26 @@ public class PatientServiceTest {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "ServiceTest2", "1999-02-12");
 	//THEN
 	assertEquals(patientOptional.isPresent(), false);
+    }
+    
+    @Test
+    public void getPatientByNameTest() {
+	//GIVEN
+	List<Patient> result = new ArrayList<>();
+	//WHEN
+	result = patientService.getAllByName("TestBorderline");
+	//THEN
+	assertEquals(result.isEmpty(), false);
+    }
+    
+    @Test
+    public void getPatientByNameErrorTest() {
+	//GIVEN
+	List<Patient> result = new ArrayList<>();
+	//WHEN
+	result = patientService.getAllByName("TestError");
+	//THEN
+	assertEquals(result.isEmpty(), true);
     }
 
 }

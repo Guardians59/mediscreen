@@ -1,6 +1,8 @@
 package com.openclassrooms.mspatient.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,7 +90,7 @@ public class PatientController {
 	}
     }
     @ApiOperation(value = "Mets à jour les informations d'un patient via son id.")
-    @PutMapping("patient/update/{id}")
+    @PutMapping("/patient/update/{id}")
     public void updatePatient(@PathVariable("id") int id, @RequestBody Patient patientUpdate) {
 	boolean result = patientService.updatePatient(id, patientUpdate);
 	if (result == false) {
@@ -96,13 +98,24 @@ public class PatientController {
 	}
     }
     @ApiOperation(value = "Supprime un patient via son id.")
-    @DeleteMapping("patient/delete/{id}")
+    @DeleteMapping("/patient/delete/{id}")
     public ResponseEntity<?> deletePatient(@PathVariable("id") int id) {
 	boolean result = patientService.deletePatient(id);
 	if (result == false) {
 	    throw new ErrorDeletePatient("An error occured while deleting the patient");
 	} else {
 	    return ResponseEntity.status(HttpStatus.OK).build();
+	}
+    }
+    
+    @GetMapping("/patient/getAllByName/{lastName}")
+    public List<Patient> getAllByName(@PathVariable("lastName") String lastName) {
+	List<Patient> result = new ArrayList<>();
+	result = patientService.getAllByName(lastName);
+	if(result.isEmpty()) {
+	    throw new ErrorGetPatient("An error occurred while searching for the patient");
+	} else {
+	    return result;
 	}
     }
 

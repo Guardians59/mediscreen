@@ -1,6 +1,7 @@
 package com.openclassrooms.mediscreenUI.proxies;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 
-import feign.Headers;
-
 @FeignClient(name = "microservice-patient", url = "localhost:8081")
 public interface IMicroServicePatientProxy {
     
@@ -24,12 +23,15 @@ public interface IMicroServicePatientProxy {
     @GetMapping(value = "/patient/get/{id}")
     PatientBean getPatientById (@PathVariable("id") int id);
     
-    @PutMapping(value = "patient/update/{id}")
+    @PutMapping(value = "/patient/update/{id}")
     void updatePatient (@PathVariable("id") int id, @RequestBody PatientBean patientUpdated);
     
-    @PostMapping(value = "patient/add") 
+    @PostMapping(value = "/patient/add") 
     ResponseEntity<?> addPatient (@RequestBody PatientBean newPatient);
     
-    @DeleteMapping(value = "patient/delete/{id}")
+    @DeleteMapping(value = "/patient/delete/{id}")
     ResponseEntity<?> deletePatient (@PathVariable("id") int id);
-}
+    
+    @GetMapping(value = "/patient/getAllByName/{lastName}")
+    List<PatientBean> getAllByName (@PathVariable("lastName") String lastName);
+} 

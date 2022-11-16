@@ -1,6 +1,8 @@
 package com.openclassrooms.mediscreenUI.services.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +98,19 @@ public class PatientServiceImpl implements IPatientService {
 	    logger.info("The patient with id " + id + " deleted with success");
 	} else {
 	    logger.error("An error occurred while deleting the patient");
+	}
+	return result;
+    }
+
+    @Override
+    public List<PatientBean> getAllByName(String lastName) {
+	logger.debug("Search patient with lastName : " + lastName);
+	List<PatientBean> result = new ArrayList<>();
+	result = patientProxy.getAllByName(lastName);
+	if(!result.isEmpty()) {
+	    logger.info("Patient successfully found");
+	} else {
+	    logger.error("No patients found");
 	}
 	return result;
     }

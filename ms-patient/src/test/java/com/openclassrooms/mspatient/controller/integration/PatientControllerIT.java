@@ -177,5 +177,24 @@ public class PatientControllerIT {
 		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isNotFound());
     }
+    
+    @Test
+    public void getAllPatientByNameTest() throws Exception {
+	
+	mockMvc.perform(MockMvcRequestBuilders.get("/patient/getAllByName/TestNone")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.gender").value("F"))
+		.andExpect(status().isOk())
+		.andDo(MockMvcResultHandlers.print());
+    }
+    
+    @Test
+    public void getAllPatientByNameErrorTest() throws Exception {
+	
+	mockMvc.perform(MockMvcRequestBuilders.get("/patient/getAllByName/TestError")
+		.accept(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$.gender").doesNotExist())
+		.andExpect(status().isNotFound());
+    }
 
 }
