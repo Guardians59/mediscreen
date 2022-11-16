@@ -7,7 +7,7 @@
 
 <!-- css -->
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-<link rel="stylesheet" th:href="@{/css/styleHome.css}" />
+<link rel="stylesheet" th:href="@{/css/styleGetReport.css}" />
 </head>
 <body>
 	<div class="container-fluid top">
@@ -30,29 +30,51 @@
 		</div>
 	</div>
 	
-	<div class="container-fluid menu">
-	<div class="row btn-home">
-	<div th:if="${deleteSuccess}">
-			<p style="color: green;" th:text="${deleteSuccess}" align="center"></p>
+	<div class="row">
+		<div class="col-6 nav-list">
+			<a href="/patient/add">Ajouter un patient</a>&nbsp;|&nbsp;
+			<a href="/patient/search">Rechercher un patient</a>
 		</div>
-	<div th:if="${onlyDeletePatient}">
-			<p style="color: black;" th:text="${onlyDeletePatient}" align="center"></p>
-		</div>
-	<div th:if="${updateError}">
-			<p style="color: red;" th:text="${updateError}" align="center"></p>
-		</div>
-	<div th:if="${getPatientError}">
-			<p style="color: red;" th:text="${getPatientError}" align="center"></p>
-		</div>
-				<div class="text-center">
-				<a th:href="@{/patient/add}">
-			 		<button type="button" class="btn btn-dark">Ajouter un patient</button>
-			 	</a>
-				<a th:href="@{/patient/search}">
-					<button class="btn btn-dark" type="button">Rechercher un patient</button>
-				</a>
-				</div>
-			</div>
 	</div>
+
+	<div class="container-fluid">
+		<div class="Text infos">
+			<h5>Rapport du risque de diabète familial</h5>
+		</div>
+	</div>
+
+	<div class="container menu col-lg-6 col-md-8 col-10">
+
+		<table class="table border-custom" th:object="${reportBean}">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">Prenom</th>
+					<th scope="col">Nom</th>
+					<th scope="col">Âge</th>
+					<th scope="col">Risque de diabète</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="r : ${reportBean}">
+					<td scope="row" th:text="${r.firstName}"></td>
+					<td th:text="${r.lastName}"></td>
+					<td th:text="${r.age}"></td>
+					<td th:text="${r.diabetesAssessment}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="row">
+			<div class="text-center">
+				<a th:href="@{/patient/getPatient/{id}(id=${patientBean.id})}">
+			 		<button type="button" class="btn btn-dark">Informations du patient</button>
+			    </a>
+				<a th:href="@{/note/getByPatientId/{id}(id=${patientBean.id})}">
+					<button class="btn btn-dark" type="button">Note médicale</button>
+				</a>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

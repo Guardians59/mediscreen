@@ -42,6 +42,17 @@
 			<h5>Informations du patient</h5>
 		</div>
 	</div>
+	
+	<div class="row">
+		<div class="text-center">
+			<a th:href="@{/assess/id/{id}(id=${patientBean.id})}">
+				<button class="btn btn-dark" type="button">Rapport du risque de diabète personel</button>
+			</a>
+			<a th:href="@{/assess/{id}/familyName/{lastName}(id=${patientBean.id},lastName=${patientBean.lastName})}">
+				<button class="btn btn-dark" type="button">Rapport du risque de diabète familial</button>
+			</a>
+		</div>
+		</div>
 
 	<div class="container menu col-lg-6 col-md-8 col-10">
 
@@ -53,6 +64,9 @@
 		</div>
 		<div th:if="${noUpdate}">
 			<p style="color: black;" th:text="${noUpdate}" align="center"></p>
+		</div>
+		<div th:if="${getReportError}">
+			<p style="color: red;" th:text="${getReportError}" align="center"></p>
 		</div>
 
 		<table class="table border-custom" th:object="${patientBean}">
@@ -94,6 +108,7 @@
 				</a>
 			</div>
 		</div>
+		
 	</div>
 
 </body>
