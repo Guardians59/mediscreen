@@ -1,11 +1,11 @@
-HemoglobinA1C
+Hemoglobin A1C
 Microalbumin
 Height
-Weight
+Overweight
 Smoker
 Abnormal
 Cholesterol
 Dizziness
 Relapse
 Reaction
-Antibody
+Antibodies

@@ -48,4 +48,9 @@ public class Note {
         this.note = note;
     }
 
+    @Override
+    public String toString() {
+	return "Note [id=" + id + ", patientId=" + patientId + ", patient=" + patient + ", note=" + note + "]";
+    }
+
 }

@@ -11,7 +11,13 @@ import com.openclassrooms.msreport.model.Note;
 @Repository
 public interface IReportRepository extends MongoRepository<Note, String> {
     
-    @Query("{ 'patientId' : ?0, 'note' : { $regex: ?1, $options: 'xi' } }")
-    public List<Note> findKeyWords(int patientId, String regex);
+    @Query("{ 'patientId' : ?0, 'note' : { $regex: ?1, $options: 'i' } }")
+    public List<Note> findNumberNoteWithTriggerById(int patientId, String regex);
+    
+    @Query("{ 'patient' : ?0, 'note' : { $regex: ?1, $options: 'i' } }")
+    public List<Note> findNumberNoteWithTriggerByName(String patientLastName, String regex);
+    
+    @Query("{ 'patient' : ?0 }")
+    public List<Note> findAllByName(String patientLastName);
 
 }
