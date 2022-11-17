@@ -47,7 +47,7 @@ public class NoteControllerIT {
     public void getNoteByPatientIdTest() throws Exception {
 	mockMvc.perform(MockMvcRequestBuilders.get("/note/getByPatientId/4")
 		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.[0].patient").value("TestEarlyOnSet"))
+		.andExpect(jsonPath("$.[0].patient").value("TestEarlyOnset"))
 		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
     }
