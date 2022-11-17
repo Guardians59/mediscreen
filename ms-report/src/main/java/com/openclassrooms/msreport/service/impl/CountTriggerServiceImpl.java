@@ -1,6 +1,7 @@
 package com.openclassrooms.msreport.service.impl;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,8 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
     @Override
     public int numberOfTriggerById(int patientId) throws IOException {
 	ArrayList<String> keyList = new ArrayList<>();
-	BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/triggerTerm.txt"));
+	String path = new File("src/main/resources/triggerTerm.txt").getAbsolutePath();
+	BufferedReader reader = new BufferedReader(new FileReader(path));
 	logger.debug("Reading the file containing the trigger term");
 	countResult = 0;
 	try {

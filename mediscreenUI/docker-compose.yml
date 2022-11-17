@@ -31,7 +31,7 @@ services:
   patient:
     depends_on:
      - db
-    image: ms-patient-image
+    image: guardians59/ms-patient-image
     container_name: ms-patient
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb/mediscreen?serverTimezone=UTC
@@ -46,10 +46,21 @@ services:
   note:
     depends_on:
      - mongo
-    image: ms-note-image
+    image: guardians59/ms-notes-image
     container_name: ms-note
     ports:
      - 8082:8082
+    restart: always
+    networks:
+     - mediscreen-network
+     
+  report:
+    depends_on:
+     - mongo
+    image: guardians59/ms-report-image
+    container_name: ms-report
+    ports:
+     - 8083:8083
     restart: always
     networks:
      - mediscreen-network
