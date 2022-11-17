@@ -183,7 +183,7 @@ public class PatientControllerIT {
 	
 	mockMvc.perform(MockMvcRequestBuilders.get("/patient/getAllByName/TestNone")
 		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.gender").value("F"))
+		.andExpect(jsonPath("$.[0].gender").value("F"))
 		.andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
     }
@@ -193,7 +193,7 @@ public class PatientControllerIT {
 	
 	mockMvc.perform(MockMvcRequestBuilders.get("/patient/getAllByName/TestError")
 		.accept(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$.gender").doesNotExist())
+		.andExpect(jsonPath("$.[0].gender").doesNotExist())
 		.andExpect(status().isNotFound());
     }
 
