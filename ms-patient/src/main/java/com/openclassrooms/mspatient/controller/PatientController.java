@@ -107,7 +107,7 @@ public class PatientController {
 	    return ResponseEntity.status(HttpStatus.OK).build();
 	}
     }
-    
+    @ApiOperation(value = "Recupere la liste de tous les patients correspondant au nom de famille.")
     @GetMapping("/patient/getAllByName/{lastName}")
     public List<Patient> getAllByName(@PathVariable("lastName") String lastName) {
 	List<Patient> result = new ArrayList<>();

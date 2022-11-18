@@ -33,7 +33,7 @@ public class ReportController {
 	return result;
     }
 
-    @ApiOperation(value = "Envoie le rapport de diabete via l'id du patient au proxy.")
+    @ApiOperation(value = "Envoie au proxy le rapport de diabete via l'id du patient.")
     @PostMapping("/assess/id/{id}")
     public Report getReportByIdProxy(@PathVariable("id") int patientId, @RequestBody HashMap<String, Object> mapParams)
 	    throws IOException {
@@ -58,7 +58,7 @@ public class ReportController {
     }
 
     @SuppressWarnings("unchecked")
-    @ApiOperation(value = "Envoie les rapports de diabete familiaux via le nom de famille au proxy.")
+    @ApiOperation(value = "Envoie au proxy les rapports de diabete familiaux via le nom de famille.")
     @PostMapping("/assess/familyName/{lastName}")
     public List<Report> getReportByNameProxy(@PathVariable("lastName") String lastName,
 	    @RequestBody HashMap<String, List<?>> listParam) throws IOException {
