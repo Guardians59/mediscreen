@@ -12,12 +12,16 @@ Antibodies
 Hémoglobine A1C
 Microalbumine
 Petite Taille
+Taille inférieure
 Surpoids
+Poids corporel supérieur
 Obése
 Obésité
 Fumeur
 Fume
 Anormal
+Anormale
+Anormaux
 Cholestérol LDL
 Vertige
 Rechute
