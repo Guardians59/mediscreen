@@ -112,7 +112,7 @@ public class PatientControllerIT {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "TestNone", "1966-12-31");
 	Patient patient = new Patient();
 	patient = patientOptional.get();
-	patient.setPhoneNumber("");
+	patient.setGender("");
 	Gson gson = new Gson();
 	String json = gson.toJson(patient);
 	

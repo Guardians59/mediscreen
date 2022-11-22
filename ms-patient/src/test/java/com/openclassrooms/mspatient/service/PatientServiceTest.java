@@ -91,15 +91,15 @@ public class PatientServiceTest {
 	Optional<Patient> patientOptional = patientRepository.findPatient("Test", "TestNone", "1966-12-31");
 	Patient patient = new Patient();
 	patient = patientOptional.get();
-	String phone = patient.getPhoneNumber();
+	String gender = patient.getGender();
 	boolean result = false;
 	//WHEN
-	patient.setPhoneNumber("");
+	patient.setGender("");
 	result = patientService.updatePatient(patient.getId(), patient);
-	String newPhone = patientRepository.findPatient("Test", "TestNone", "1966-12-31").get().getPhoneNumber();
+	String newGender = patientRepository.findPatient("Test", "TestNone", "1966-12-31").get().getGender();
 	//THEN
 	assertEquals(result, false);
-	assertEquals(phone, newPhone);
+	assertEquals(gender, newGender);
     }
     
     @Test
