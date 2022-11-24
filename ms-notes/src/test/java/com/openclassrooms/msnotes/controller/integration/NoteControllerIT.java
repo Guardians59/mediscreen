@@ -59,14 +59,14 @@ public class NoteControllerIT {
 	Gson gson = new Gson();
 	String json = gson.toJson(note);
 
-	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12?patientName=TestAdd")
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/40?patientName=TestAdd")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated())
 		.andDo(MockMvcResultHandlers.print());
 
-	mockMvc.perform(MockMvcRequestBuilders.delete("/note/patientId/12").content(json)
+	mockMvc.perform(MockMvcRequestBuilders.delete("/note/patientId/40").content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
 		.andDo(MockMvcResultHandlers.print());
@@ -80,7 +80,7 @@ public class NoteControllerIT {
 	Gson gson = new Gson();
 	String json = gson.toJson(note);
 
-	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/12?patientName=TestErrorAdd")
+	mockMvc.perform(MockMvcRequestBuilders.post("/note/add/40?patientName=TestErrorAdd")
 		.content(json)
 		.contentType(MediaType.APPLICATION_JSON)
 		.accept(MediaType.APPLICATION_JSON))

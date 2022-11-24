@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -35,13 +34,8 @@ public class ReportServiceTest {
 	report.setLastName("TestService");
 	report.setAge(30);
 	report.setDiabetesAssessment("Borderline");
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", "Test");
-	mapParams.put("lastName", "TestService");
-	mapParams.put("gender", "M");
-	mapParams.put("date", "1992-09-20");
 	//WHEN
-	when(reportProxyMock.getReportById(20, mapParams)).thenReturn(report);
+	when(reportProxyMock.getReportById(20, "Test", "TestService", "M", "1992-09-20")).thenReturn(report);
 	result = reportService.getReportById(20, "Test", "TestService", "M", "1992-09-20");
 	//THEN
 	assertEquals(result.getDiabetesAssessment(), "Borderline");
@@ -51,23 +45,18 @@ public class ReportServiceTest {
     public void getAllReportByNameTest() {
 	//GIVEN
 	List<ReportBean> resultProxy = new ArrayList<>();
-	HashMap<String, List<?>> mapParams = new HashMap<>();
-	List<Integer> patientId = new ArrayList<>();
+	List<Integer> patientIdList = new ArrayList<>();
 	List<String> firstNameList = new ArrayList<>();
 	List<String> genderList = new ArrayList<>();
-	List<String> dateList = new ArrayList<>();
-	patientId.add(50);
-	patientId.add(51);
+	List<String> birthdayList = new ArrayList<>();
+	patientIdList.add(50);
+	patientIdList.add(51);
 	firstNameList.add("TestFamily");
 	firstNameList.add("TestFamilyBis");
 	genderList.add("F");
 	genderList.add("M");
-	dateList.add("1980-02-10");
-	dateList.add("1978-04-10");
-	mapParams.put("patientId", patientId);
-	mapParams.put("firstName", firstNameList);
-	mapParams.put("gender", genderList);
-	mapParams.put("date", dateList);
+	birthdayList.add("1980-02-10");
+	birthdayList.add("1978-04-10");
 	List<PatientBean> listPatient = new ArrayList<>();
 	PatientBean patient1 = new PatientBean();
 	patient1.setId(50);
@@ -97,7 +86,7 @@ public class ReportServiceTest {
 	resultProxy.add(reportBis);
 	List<ReportBean> result = new ArrayList<>();
 	//WHEN
-	when(reportProxyMock.getReportByLastName("TestFamilyName", mapParams)).thenReturn(resultProxy);
+	when(reportProxyMock.getReportByLastName("TestFamilyName", patientIdList, firstNameList, genderList, birthdayList)).thenReturn(resultProxy);
 	result = reportService.getReportByName("TestFamilyName", listPatient);
 	//THEN
 	assertEquals(result.size(), 2);

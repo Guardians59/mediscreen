@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -33,19 +32,15 @@ public class PatientServiceTest {
 	//GIVEN
 	PatientBean getPatient = new PatientBean();
 	PatientBean patient = new PatientBean();
-	patient.setId(15);
+	patient.setId(25);
 	patient.setFirstName("Test");
 	patient.setLastName("TestThree");
 	patient.setGender("F");
 	patient.setBirthday("1980-10-20");
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", "Test");
-	mapParams.put("lastName", "TestThree");
-	mapParams.put("birthday", "1980-10-20");
 	//WHEN
-	when(microServicePatientProxyMock.getPatient(mapParams)).thenReturn(patient);
+	when(microServicePatientProxyMock.getPatient("Test", "TestThree", "1980-10-20")).thenReturn(patient);
 	getPatient = patientService.getPatient("Test", "TestThree", "1980-10-20");
 	//THEN
 	assertEquals(getPatient.getAddress(), patient.getAddress());
@@ -56,7 +51,7 @@ public class PatientServiceTest {
 	//GIVEN
 	PatientBean getPatient = new PatientBean();
 	PatientBean patient = new PatientBean();
-	patient.setId(15);
+	patient.setId(25);
 	patient.setFirstName("Test");
 	patient.setLastName("TestThree");
 	patient.setGender("F");
@@ -64,8 +59,8 @@ public class PatientServiceTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	//WHEN
-	when(microServicePatientProxyMock.getPatientById(15)).thenReturn(patient);
-	getPatient = patientService.getPatientById(15);
+	when(microServicePatientProxyMock.getPatientById(25)).thenReturn(patient);
+	getPatient = patientService.getPatientById(25);
 	//THEN
 	assertEquals(getPatient.getAddress(), patient.getAddress());
     }
@@ -75,7 +70,7 @@ public class PatientServiceTest {
 	//GIVEN
 	int result;
 	PatientBean patient = new PatientBean();
-	patient.setId(15);
+	patient.setId(35);
 	patient.setFirstName("Test");
 	patient.setLastName("TestThree");
 	patient.setGender("F");
@@ -83,7 +78,7 @@ public class PatientServiceTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	PatientBean patientUpdated = new PatientBean();
-	patientUpdated.setId(15);
+	patientUpdated.setId(35);
 	patientUpdated.setFirstName("Test");
 	patientUpdated.setLastName("TestThree");
 	patientUpdated.setGender("F");
@@ -91,8 +86,8 @@ public class PatientServiceTest {
 	patientUpdated.setAddress("2 rue test");
 	patientUpdated.setPhoneNumber("03253636");
 	//WHEN
-	when(microServicePatientProxyMock.getPatientById(15)).thenReturn(patient);
-	result = patientService.updatePatient(15, patientUpdated);
+	when(microServicePatientProxyMock.getPatientById(35)).thenReturn(patient);
+	result = patientService.updatePatient(35, patientUpdated);
 	//THEN
 	assertEquals(result, 1);
     }
@@ -102,7 +97,7 @@ public class PatientServiceTest {
 	//GIVEN
 	int result;
 	PatientBean patient = new PatientBean();
-	patient.setId(15);
+	patient.setId(35);
 	patient.setFirstName("Test");
 	patient.setLastName("TestThree");
 	patient.setGender("F");
@@ -110,7 +105,7 @@ public class PatientServiceTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	PatientBean patientUpdated = new PatientBean();
-	patientUpdated.setId(15);
+	patientUpdated.setId(35);
 	patientUpdated.setFirstName("Test");
 	patientUpdated.setLastName("TestThree");
 	patientUpdated.setGender("F");
@@ -118,8 +113,8 @@ public class PatientServiceTest {
 	patientUpdated.setAddress("2 rue test");
 	patientUpdated.setPhoneNumber("032536");
 	//WHEN
-	when(microServicePatientProxyMock.getPatientById(15)).thenReturn(patient);
-	result = patientService.updatePatient(15, patientUpdated);
+	when(microServicePatientProxyMock.getPatientById(35)).thenReturn(patient);
+	result = patientService.updatePatient(35, patientUpdated);
 	//THEN
 	assertEquals(result, 0);
     }

@@ -50,15 +50,15 @@ public class NoteServiceTest {
 	note.setNote("Test for the add note");
 	List<Note> list = new ArrayList<>();
 	//WHEN
-	result = noteService.addNoteByPatientId(note, 10, "Test add");
-	list = noteRepository.findByPatientId(10);
+	result = noteService.addNoteByPatientId(note, 100, "Test add");
+	list = noteRepository.findByPatientId(100);
 	//THEN
 	assertEquals(result, true);
 	assertEquals(list.isEmpty(), false);
 	
 	//WHEN
-	boolean deleteNote = noteService.deleteByPatientId(10);
-	list = noteRepository.findByPatientId(10);
+	boolean deleteNote = noteService.deleteByPatientId(100);
+	list = noteRepository.findByPatientId(100);
 	//THEN
 	assertEquals(deleteNote, true);
 	assertEquals(list.isEmpty(), true);
@@ -72,8 +72,8 @@ public class NoteServiceTest {
 	List<Note> list = new ArrayList<>();
 	note.setNote("");
 	//WHEN
-	result = noteService.addNoteByPatientId(note, 11, "Test error add");
-	list = noteRepository.findByPatientId(11);
+	result = noteService.addNoteByPatientId(note, 111, "Test error add");
+	list = noteRepository.findByPatientId(111);
 	//THEN
 	assertEquals(result, false);
 	assertTrue(list.isEmpty());

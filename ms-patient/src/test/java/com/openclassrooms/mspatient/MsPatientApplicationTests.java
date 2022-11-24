@@ -6,8 +6,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class MsPatientApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
+
+    @Test
+    public void contextTest() {
+	MsPatientApplication.main(new String[] {});
+    }
 
 }

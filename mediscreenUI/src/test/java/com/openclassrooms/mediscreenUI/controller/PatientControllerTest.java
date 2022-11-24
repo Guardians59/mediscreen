@@ -7,8 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.util.HashMap;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -68,23 +66,19 @@ public class PatientControllerTest {
     public void getPatientPageTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
-	patient.setId(10);
+	patient.setId(30);
 	patient.setFirstName("Test");
 	patient.setLastName("TestTwo");
 	patient.setGender("M");
 	patient.setBirthday("1980-10-20");
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", "Test");
-	mapParams.put("lastName", "TestTwo");
-	mapParams.put("birthday", "1980-10-20");
 	GetPatientModel patientModel = new GetPatientModel();
 	patientModel.setFirstName("Test");
 	patientModel.setLastName("TestTwo");
 	patientModel.setBirthday("1980-10-20");
 	//WHEN
-	when(microServicePatientProxyMock.getPatient(mapParams)).thenReturn(patient);
+	when(microServicePatientProxyMock.getPatient("Test", "TestTwo", "1980-10-20")).thenReturn(patient);
 	when(patientService.getPatient("Test", "TestTwo", "1980-10-20")).thenReturn(patient);
 	//THEN
 	mockMvc.perform(get("/patient/getPatient")
@@ -98,23 +92,19 @@ public class PatientControllerTest {
     public void getPatientTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
-	patient.setId(10);
+	patient.setId(30);
 	patient.setFirstName("Test");
 	patient.setLastName("TestTwo");
 	patient.setGender("M");
 	patient.setBirthday("1980-10-20");
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", "Test");
-	mapParams.put("lastName", "TestTwo");
-	mapParams.put("birthday", "1980-10-20");
 	GetPatientModel patientModel = new GetPatientModel();
 	patientModel.setFirstName("Test");
 	patientModel.setLastName("TestTwo");
 	patientModel.setBirthday("1980-10-20");
 	//WHEN
-	when(microServicePatientProxyMock.getPatient(mapParams)).thenReturn(patient);
+	when(microServicePatientProxyMock.getPatient("Test", "TestTwo", "1980-10-20")).thenReturn(patient);
 	when(patientService.getPatient("Test", "TestTwo", "1980-10-20")).thenReturn(patient);
 	//THEN
 	mockMvc.perform(post("/patient/getPatient")
@@ -128,16 +118,12 @@ public class PatientControllerTest {
     public void getPatientErrorTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", "Test");
-	mapParams.put("lastName", "TestError");
-	mapParams.put("birthday", "1980-10-20");
 	GetPatientModel patientModel = new GetPatientModel();
 	patientModel.setFirstName("Test");
 	patientModel.setLastName("TestError");
 	patientModel.setBirthday("1980-10-20");
 	//WHEN
-	when(microServicePatientProxyMock.getPatient(mapParams)).thenReturn(patient);
+	when(microServicePatientProxyMock.getPatient("Test", "TestError", "1980-10-20")).thenReturn(patient);
 	when(patientService.getPatient("Test", "TestError", "1980-10-20")).thenReturn(patient);
 	//THEN
 	mockMvc.perform(post("/patient/getPatient")
@@ -152,7 +138,7 @@ public class PatientControllerTest {
     public void getPatientByIdPageTest() throws Exception {
 	//GIVEN
 	PatientBean patient = new PatientBean();
-	patient.setId(10);
+	patient.setId(20);
 	patient.setFirstName("Test");
 	patient.setLastName("TestTwo");
 	patient.setGender("M");
@@ -160,10 +146,10 @@ public class PatientControllerTest {
 	patient.setAddress("2 rue test");
 	patient.setPhoneNumber("032536");
 	//WHEN
-	when(microServicePatientProxyMock.getPatientById(10)).thenReturn(patient);
-	when(patientService.getPatientById(10)).thenReturn(patient);
+	when(microServicePatientProxyMock.getPatientById(20)).thenReturn(patient);
+	when(patientService.getPatientById(20)).thenReturn(patient);
 	//THEN
-	mockMvc.perform(get("/patient/getPatient/10")
+	mockMvc.perform(get("/patient/getPatient/20")
 		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 		.flashAttr("patientBean", patient))
 		.andExpect(view().name("getPatient"));
