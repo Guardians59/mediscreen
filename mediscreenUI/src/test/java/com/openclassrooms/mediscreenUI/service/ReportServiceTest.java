@@ -35,7 +35,7 @@ public class ReportServiceTest {
 	report.setAge(30);
 	report.setDiabetesAssessment("Borderline");
 	//WHEN
-	when(reportProxyMock.getReportById(20, "Test", "TestService", "M", "1992-09-20")).thenReturn(report);
+	when(reportProxyMock.getReportByPatientId(20, "Test", "TestService", "M", "1992-09-20")).thenReturn(report);
 	result = reportService.getReportById(20, "Test", "TestService", "M", "1992-09-20");
 	//THEN
 	assertEquals(result.getDiabetesAssessment(), "Borderline");

@@ -1,7 +1,6 @@
 package com.openclassrooms.mediscreenUI.services.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,11 +27,7 @@ public class PatientServiceImpl implements IPatientService {
 	logger.debug("Search patient with firstname : " + firstName + " lastname : " + lastName + " and birthday : "
 		+ birthday);
 	PatientBean patient = new PatientBean();
-	HashMap<String, Object> mapParams = new HashMap<>();
-	mapParams.put("firstName", firstName);
-	mapParams.put("lastName", lastName);
-	mapParams.put("birthday", birthday);
-	patient = patientProxy.getPatient(mapParams);
+	patient = patientProxy.getPatient(firstName, lastName, birthday);
 	if(patient.getFirstName() != null) {
 	    logger.info("Patient successfully found");
 	} else {
