@@ -23,24 +23,40 @@ import com.openclassrooms.msnotes.service.INoteService;
 
 import io.swagger.annotations.ApiOperation;
 
+/**
+ * La classe NoteController est le controller qui permet de gérer les URL du
+ * micro-service de gestion de note.
+ * 
+ * @author Dylan
+ *
+ */
 @RestController
 public class NoteController {
     
     @Autowired
     INoteService noteService;
     
+    /**
+     * La méthode getNoteByPatientId permet de récupérer la liste des notes médicales
+     * d'un patient via son id.
+     * @param id l'id du patient.
+     * @return List les notes médicales du patient.
+     */
     @ApiOperation(value = "Recupere les notes medicales sur un patient via son id.")
     @GetMapping("/note/getByPatientId/{id}")
     public List<Note> getNoteByPatientId(@PathVariable("id") int id) {
 	List<Note> result = noteService.getNoteByPatientId(id);
 	return result;
     }
-    @ApiOperation(value = "Envoie au proxy les notes medicales sur un patient via son id.")
-    @PostMapping("/note/getByPatientId/{id}")
-    public List<Note> getNoteByPatientIdProxy(@PathVariable("id") int id) {
-	List<Note> result = noteService.getNoteByPatientId(id);
-	return result;
-    }
+    
+    /**
+     * La méthode addNote permet d'ajouter une note médicale sur un patient.
+     * @param id l'id du patient.
+     * @param patientName le nom du patient.
+     * @param newNote la note médicale à ajouter.
+     * @return response entity, status Created si la note à été ajoutée avec succès,
+     * ou NotFound si une erreur est survenue.
+     */
     @ApiOperation(value = "Ajoute une note de medicale sur un patient.")
     @PostMapping("/note/add/{id}")
     public ResponseEntity<?> addNote(@PathVariable("id") int id, @RequestParam String patientName, @RequestBody Note newNote) {
@@ -51,6 +67,14 @@ public class NoteController {
 	    return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
     }
+    
+    /**
+     * La méthode updateNoteById permet de mettre à jour une note via l'id de celle-ci.
+     * @param id l'id de la note.
+     * @param noteUpdated les informations de la note modifiées.
+     * @return response entity, status Ok si la mise à jour est validée, ou NotFound si
+     * une erreur est rencontrée.
+     */
     @ApiOperation(value = "Mets à jour une note medicale sur un patient via l'id de la note.")
     @PutMapping("/note/update/{id}")
     public ResponseEntity<?> updateNoteById(@PathVariable("id") String id, @RequestBody Note noteUpdated) {
@@ -61,6 +85,12 @@ public class NoteController {
 	    return ResponseEntity.status(HttpStatus.OK).build();
 	}
     }
+    
+    /**
+     * La méthode getNoteById permet de récupérer une note via son id.
+     * @param id l'id de la note.
+     * @return Note, la note récupérée.
+     */
     @ApiOperation(value = "Recupere une note medicale via l'id.")
     @GetMapping("/note/get/{id}")
     public Note getNoteById(@PathVariable("id") String id) {
@@ -71,16 +101,14 @@ public class NoteController {
 	    return note;
 	}
     }
-    @ApiOperation(value = "Envoie au proxy une note medicale via l'id.")
-    @PostMapping("/note/get/{id}")
-    public Note getNoteByIdProxy(@PathVariable("id") String id) {
-	Note note = noteService.getNoteById(id);
-	if(note.getPatient() == null) {
-	    throw new ErrorGetNote("An error occured while searching the note");
-	} else {
-	    return note;
-	}
-    }
+    
+    /**
+     * La méthode deleteNoteByPatientId permet de supprimer les notes médicales d'un patient
+     * via son id.
+     * @param id l'id du patient.
+     * @return response entity, status Ok si la suppression est confirmée, NotFound si
+     * une erreur est survenue.
+     */
     @ApiOperation(value = "Supprime les notes medicales d'un patient via son id.")
     @DeleteMapping("/note/patientId/{id}")
     public ResponseEntity<?> deleteNoteByPatientId(@PathVariable("id") int id) {
@@ -90,7 +118,7 @@ public class NoteController {
 	} else {
 	    return ResponseEntity.status(HttpStatus.OK).build();
 	}
-    }
+     }
 
     }
 

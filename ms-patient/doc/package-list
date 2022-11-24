@@ -1,0 +1,9 @@
+com.openclassrooms.mspatient
+com.openclassrooms.mspatient.config
+com.openclassrooms.mspatient.controller
+com.openclassrooms.mspatient.controller.exception
+com.openclassrooms.mspatient.controller.integration
+com.openclassrooms.mspatient.model
+com.openclassrooms.mspatient.repository
+com.openclassrooms.mspatient.service
+com.openclassrooms.mspatient.service.impl

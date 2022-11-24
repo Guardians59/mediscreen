@@ -18,6 +18,14 @@ import com.openclassrooms.msreport.model.Report;
 import com.openclassrooms.msreport.service.ICountTriggerService;
 import com.openclassrooms.msreport.service.IReportService;
 
+/**
+ * La classe ReportServiceImpl est l'implémentation de l'interface
+ * IReportService.
+ * 
+ * @see IReportService
+ * @author Dylan
+ *
+ */
 @Service
 public class ReportServiceImpl implements IReportService {
 
@@ -29,18 +37,28 @@ public class ReportServiceImpl implements IReportService {
     private int index;
 
     @Override
-    public Report getReportById(int patientId, String firstName, String lastName, String gender, String date)
+    public Report getReportByPatientId(int patientId, String firstName, String lastName, String gender, String birthday)
 	    throws IOException {
 	Locale.setDefault(Locale.ENGLISH);
 	Report result = new Report();
 	int numberOfTrigger = -1;
+	/*
+	 * On calcul le nombre d'occurence retrouvées dans les notes médicales du
+	 * patient.
+	 */
 	numberOfTrigger = countTriggerService.numberOfTriggerById(patientId);
 	Date dateFormat;
 	Date dateNow = new Date();
 	logger.debug("Search the risk level for the patient with id " + patientId);
 
+	/*
+	 * On initie un try catch afin de formater la date de naissance du patient, pour
+	 * pouvoir calculer son age. Ensuite nous recherchons dans quelle catégorie se
+	 * retrouve le patient selon son âge, son sexe et le nombre d'occurence présente
+	 * dans ses notes médicales.
+	 */
 	try {
-	    dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+	    dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
 	    int age = (int) ((dateNow.getTime() - dateFormat.getTime()) / 31557600000.0);
 
 	    if (numberOfTrigger == -1) {
@@ -87,16 +105,21 @@ public class ReportServiceImpl implements IReportService {
     }
 
     @Override
-    public List<Report> getReportByName(String lastName, List<Integer> patientId, List<String> firstNameList,
-	    List<String> genderList, List<String> dateList) throws IOException {
+    public List<Report> getReportByName(String lastName, List<Integer> patientIdList, List<String> firstNameList,
+	    List<String> genderList, List<String> birthdayList) throws IOException {
 	Locale.setDefault(Locale.ENGLISH);
 	List<Report> result = new ArrayList<>();
 	index = 0;
+	/*
+	 * On récupére la map contenant les id des patients et le nombre d'occurence
+	 * correspondante. On initie une boucle forEach sur les id, afin de récupérer
+	 * pour chaque patient le nombre d'occurence retrouvées.
+	 */
 	mapPatient = countTriggerService.numberOfTriggerByName(lastName);
 	Date dateNow = new Date();
 	logger.debug("Search the risk level for the patient with familyName " + lastName);
 
-	patientId.forEach(id -> {
+	patientIdList.forEach(id -> {
 	    Report report = new Report();
 	    int numberOfTrigger = -1;
 	    Date dateFormat = new Date();
@@ -104,8 +127,14 @@ public class ReportServiceImpl implements IReportService {
 		numberOfTrigger = mapPatient.get(id).intValue();
 		String firstName = firstNameList.get(index);
 		String gender = genderList.get(index);
-		String date = dateList.get(index);
+		String date = birthdayList.get(index);
 
+		/*
+		 * On initie un try catch afin de formater la date de naissance du patient, pour
+		 * pouvoir calculer son age. Ensuite nous recherchons dans quelle catégorie se
+		 * retrouve le patient selon son âge, son sexe et le nombre d'occurence présente
+		 * dans ses notes médicales.
+		 */
 		try {
 		    dateFormat = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 		    int age = (int) ((dateNow.getTime() - dateFormat.getTime()) / 31557600000.0);
@@ -156,6 +185,8 @@ public class ReportServiceImpl implements IReportService {
 		}
 
 	    }
+	    // On ajoute un à l'index permettant de retrouver les informations du prochain
+	    // patient dans les listes.
 	    index++;
 	});
 

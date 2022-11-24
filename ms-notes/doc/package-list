@@ -1,0 +1,9 @@
+com.openclassrooms.msnotes
+com.openclassrooms.msnotes.config
+com.openclassrooms.msnotes.controller
+com.openclassrooms.msnotes.controller.exception
+com.openclassrooms.msnotes.controller.integration
+com.openclassrooms.msnotes.model
+com.openclassrooms.msnotes.repository
+com.openclassrooms.msnotes.service
+com.openclassrooms.msnotes.service.impl

@@ -13,6 +13,13 @@ import com.openclassrooms.mspatient.model.Patient;
 import com.openclassrooms.mspatient.repository.IPatientRepository;
 import com.openclassrooms.mspatient.service.IPatientService;
 
+/**
+ * La classe PatientServiceImpl est l'implémentation de l'interface IPatientService.
+ * 
+ * @see IPatientService
+ * @author Dylan
+ *
+ */
 @Service
 public class PatientServiceImpl implements IPatientService {
 
@@ -26,7 +33,11 @@ public class PatientServiceImpl implements IPatientService {
 	Patient newPatient = new Patient();
 	boolean result = false;
 	logger.debug("Adding a new patient");
-
+	/*
+	 * On vérifie que les informations soient bien présentes, si tel est le cas
+	 * on sauvegarde le nouveau patient en base de données et on renvoit true au boolean,
+	 * sinon on renvoit false.
+	 */
 	if ((patient.getFirstName() == null || patient.getFirstName().isEmpty())
 		|| (patient.getLastName() == null || patient.getLastName().isEmpty())
 		|| (patient.getBirthday() == null || patient.getBirthday().isEmpty())
@@ -48,6 +59,7 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public Patient getPatient(String firstName, String lastName, String birthday) {
+	//On récupére le patient en base de données via son prénom, nom et date de naissance.
 	Optional<Patient> patientOptional = patientRepository.findPatient(firstName, lastName, birthday);
 	Patient patient = new Patient();
 	logger.debug("Search patient with firstname : " + firstName + " lastname : " + lastName + " and birthday : "
@@ -64,6 +76,7 @@ public class PatientServiceImpl implements IPatientService {
     
     @Override
     public Patient getPatientById(int id) {
+	//On récupére le patient en base de données via son id.
 	Optional<Patient> patientOptional = patientRepository.findById(id);
 	Patient patient = new Patient();
 	logger.debug("Search patient with id : " + id);
@@ -79,18 +92,23 @@ public class PatientServiceImpl implements IPatientService {
     @Override
     public boolean updatePatient(int id, Patient patientUpdated) {
 	boolean result = false;
+	//On récupére le patient en base de données via son id.
 	Optional<Patient> patientOptional = patientRepository.findById(id);
 	Patient patient = new Patient();
 	logger.debug("Patient update");
 	if (patientOptional.isPresent()) {
 	    patient = patientOptional.get();
 	    logger.info("Patient successfully found");
-	    if ((patientUpdated.getAddress() == null || patientUpdated.getAddress().isBlank())
-		    || (patientUpdated.getBirthday() == null || patientUpdated.getBirthday().isBlank())
+	    /*
+	     * On vérifie que toutes les informations soient bien présentes, afin de mettre à jour
+	     * le patient, et de le sauvegarder en base de données.
+	     * Le boolean renverra true si la mise est à jour est un succès, false si une
+	     * une erreur est rencontrée.
+	     */
+	    if ((patientUpdated.getBirthday() == null || patientUpdated.getBirthday().isBlank())
 		    || (patientUpdated.getFirstName() == null || patientUpdated.getFirstName().isBlank())
 		    || (patientUpdated.getGender() == null || patientUpdated.getGender().isBlank())
-		    || (patientUpdated.getLastName() == null || patientUpdated.getLastName().isBlank())
-		    || (patientUpdated.getPhoneNumber() == null || patientUpdated.getPhoneNumber().isBlank())) {
+		    || (patientUpdated.getLastName() == null || patientUpdated.getLastName().isBlank())) {
 		logger.error("Information is missing for the update");
 		
 	    } else {
@@ -114,6 +132,10 @@ public class PatientServiceImpl implements IPatientService {
     public boolean deletePatient(int id) {
 	logger.debug("Delete the patient with id : " + id);
 	boolean result = false;
+	/*
+	 * On vérifie que le patient existe bien en base de données via son id, afin
+	 * ensuite de le supprimer.
+	 */
 	if(patientRepository.existsById(id)) {
 	    patientRepository.deleteById(id);
 	    result = true;
@@ -127,6 +149,7 @@ public class PatientServiceImpl implements IPatientService {
     @Override
     public List<Patient> getAllByName(String lastName) {
 	List<Patient> result = new ArrayList<>();
+	//On récupére tous les patients ayant le nom de famille indiqué.
 	result = patientRepository.findAllPatientByName(lastName);
 	logger.debug("Search patient with lastName : " + lastName);
 	if(!result.isEmpty()) {

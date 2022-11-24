@@ -17,6 +17,13 @@ import com.openclassrooms.msreport.model.Note;
 import com.openclassrooms.msreport.repository.IReportRepository;
 import com.openclassrooms.msreport.service.ICountTriggerService;
 
+/**
+ * La classe CountTriggerServiceImpl est l'implémentation de l'interface ICountTriggerService.
+ * 
+ * @see ICountTriggerService
+ * @author Dylan
+ *
+ */
 @Service
 public class CountTriggerServiceImpl implements ICountTriggerService {
 
@@ -29,10 +36,17 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
     @Override
     public int numberOfTriggerById(int patientId) throws IOException {
 	ArrayList<String> keyList = new ArrayList<>();
+	//On récupére le fichier contenant les mots clés des occurences.
 	String path = new File("src/main/resources/triggerTerm.txt").getAbsolutePath();
 	BufferedReader reader = new BufferedReader(new FileReader(path));
 	logger.debug("Reading the file containing the trigger term");
 	countResult = 0;
+	
+	/*
+	 * On initie un try catch afin de lire le fichier pour ajouter chaque occurence
+	 * dans une liste de String.
+	 * Si une erreur est rencontrée on capture l'IOException.
+	 */
 	try {
 	    String line = reader.readLine();
 	    while (line != null) {
@@ -44,7 +58,12 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
 	} finally {
 	    reader.close();
 	}
-	
+	/*
+	 * On initie une boucle forEach afin de chercher dans les notes médicales si le mot
+	 * clés correspondant à une occurence est présent dans une de celles-ci.
+	 * Si on retrouve une ou plusieurs note avec cette occurence alors on ajoute un,
+	 * à la valeur de l'integer countResult, qui sera retourné au final.
+	 */
 	keyList.forEach(key -> {
 	    List<Note> list = new ArrayList<>();
 	    list = reportRepository.findNumberNoteWithTriggerById(patientId, key);
@@ -63,9 +82,17 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
 	List<Note> listNote = new ArrayList<>();
 	ArrayList<Integer> listId = new ArrayList<>();
 	listNote = reportRepository.findAllByName(lastName);
-	BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/triggerTerm.txt"));
+	//On récupére le fichier contenant les mots clés des occurences.
+	String path = new File("src/main/resources/triggerTerm.txt").getAbsolutePath();
+	BufferedReader reader = new BufferedReader(new FileReader(path));
 	logger.debug("Reading the file containing the trigger term");
 	countResult = 0;
+	
+	/**
+	 * On initie un try catch afin de lire le fichier pour ajouter chaque occurence
+	 * dans une liste de String.
+	 * Si une erreur est rencontrée on capture l'IOException.
+	 */
 	try {
 	    String line = reader.readLine();
 	    while (line != null) {
@@ -77,7 +104,10 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
 	} finally {
 	    reader.close();
 	}
-	
+	/*
+	 * On récupére dans une liste les id des patients ayant le même nom de famille que 
+	 * celui rechercher.
+	 */
 	listNote.forEach(note -> {
 	    int patientId = note.getPatientId();
 	    if(!listId.contains(patientId)) {
@@ -85,7 +115,13 @@ public class CountTriggerServiceImpl implements ICountTriggerService {
 	    }
 	});
 	
-	
+	/*
+	 * On initie une boucle forEach pour chaque id des patients retrouvés précedemment
+	 * puis on initie une autre boucle forEach pour chaque mot clés d'occurence, afin
+	 * de rechercher dans les notes de chaque patient le nombre d'occurence.
+	 * On retourne ensuite dans la HashMap l'id du patient avec le nombre d'occurence
+	 * retrouvées.
+	 */
 	listId.forEach(id -> {
 	    countResult = 0;
 	    keyList.forEach(key -> {

@@ -13,6 +13,13 @@ import com.openclassrooms.msnotes.model.Note;
 import com.openclassrooms.msnotes.repository.INoteRepository;
 import com.openclassrooms.msnotes.service.INoteService;
 
+/**
+ * La classe NoteServiceImpl est l'implémentation de l'interface INoteService.
+ * 
+ * @see INoteService
+ * @author Dylan
+ *
+ */
 @Service
 public class NoteServiceImpl implements INoteService {
 
@@ -25,6 +32,7 @@ public class NoteServiceImpl implements INoteService {
     public List<Note> getNoteByPatientId(int patientId) {
 	logger.debug("Search doctors notes for patient with id " + patientId);
 	List<Note> result = new ArrayList<>();
+	//On récupére la liste de note dans la base de données via l'id du patient.
 	result = noteRepository.findByPatientId(patientId);
 	if (result.isEmpty()) {
 	    logger.info("No doctor's note found for this patient");
@@ -39,6 +47,11 @@ public class NoteServiceImpl implements INoteService {
 	logger.debug("Add a note for the patient with id " + patientId);
 	boolean result = false;
 	Note note = new Note();
+	/*
+	 * On vérifie que les informations soient bien présentes, si tel est le cas
+	 * on sauvegarde la nouvelle note en base de données et on renvoit true au boolean,
+	 * sinon on renvoit false.
+	 */
 	if ((newNote.getNote().isBlank() || newNote.getNote() == null) || (patientId <= 0)
 		|| (patientName.isBlank() || patientName == null)) {
 	    logger.error("An error occurred while adding the note");
@@ -56,6 +69,11 @@ public class NoteServiceImpl implements INoteService {
 
     @Override
     public boolean updateNote(String id, Note noteUpdated) {
+	/*
+	 * On récupére la note en base de données via son id, on vérifie que la nouvelle
+	 * note n'est pas vide ou null, puis on sauvegarde la nouvelle description de la note
+	 * et on renvoit true au boolean.
+	 */
 	boolean result = false;
 	Optional<Note> optionalNote = noteRepository.findById(id);
 	if (optionalNote.isPresent()) {
@@ -77,6 +95,7 @@ public class NoteServiceImpl implements INoteService {
 
     @Override
     public Note getNoteById(String id) {
+	//On récupére la note depuis la base de données via son id.
 	Optional<Note> optionalNote = noteRepository.findById(id);
 	Note note = new Note();
 	logger.debug("Search the note with id " + id);
@@ -94,11 +113,16 @@ public class NoteServiceImpl implements INoteService {
 	logger.debug("Search doctors notes for patient with id " + patientId);
 	boolean result = false;
 	List<Note> list = new ArrayList<>();
+	//On récupére la liste des notes médicales du patient via son id.
 	list = noteRepository.findByPatientId(patientId);
 	if(list.isEmpty()) {
 	    logger.info("No doctor's note found for this patient");
 	    result = true;
 	} else {
+	    /*
+	     * On supprime la liste des notes médicales du patient, puis on vérifie que tout
+	     * s'est bien exécuté en recherchant la première note avec son id récupérer auparavant.
+	     */
 	    String id = list.get(0).getId();
 	    noteRepository.deleteAll(list);
 	    boolean noteDelete = noteRepository.existsById(id);

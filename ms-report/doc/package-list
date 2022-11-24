@@ -1,0 +1,8 @@
+com.openclassrooms.msreport
+com.openclassrooms.msreport.config
+com.openclassrooms.msreport.controller
+com.openclassrooms.msreport.controller.integration
+com.openclassrooms.msreport.model
+com.openclassrooms.msreport.repository
+com.openclassrooms.msreport.service
+com.openclassrooms.msreport.service.impl
