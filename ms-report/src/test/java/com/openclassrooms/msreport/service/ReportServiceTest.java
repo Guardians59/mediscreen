@@ -28,7 +28,7 @@ public class ReportServiceTest {
     public void getReportNoneByIdTest() throws IOException {
 	Report result = new Report();
 	when(countTriggerServiceMock.numberOfTriggerById(1)).thenReturn(0);
-	result = reportService.getReportById(1, "Test", "TestNone", "F", "1966-12-31");
+	result = reportService.getReportByPatientId(1, "Test", "TestNone", "F", "1966-12-31");
 	assertEquals(result.getDiabetesAssessment(), "None");
     }
     
@@ -36,7 +36,7 @@ public class ReportServiceTest {
     public void getReportBorderlineByIdTest() throws IOException {
 	Report result = new Report();
 	when(countTriggerServiceMock.numberOfTriggerById(2)).thenReturn(2);
-	result = reportService.getReportById(2, "Test", "TestBorderline", "M", "1945-06-24");
+	result = reportService.getReportByPatientId(2, "Test", "TestBorderline", "M", "1945-06-24");
 	assertEquals(result.getDiabetesAssessment(), "Borderline");
     }
     
@@ -44,7 +44,7 @@ public class ReportServiceTest {
     public void getReportInDangerByIdTest() throws IOException {
 	Report result = new Report();
 	when(countTriggerServiceMock.numberOfTriggerById(3)).thenReturn(3);
-	result = reportService.getReportById(3, "Test", "TestInDanger", "M", "2004-06-18");
+	result = reportService.getReportByPatientId(3, "Test", "TestInDanger", "M", "2004-06-18");
 	assertEquals(result.getDiabetesAssessment(), "In Danger");
     }
     
@@ -52,7 +52,7 @@ public class ReportServiceTest {
     public void getReportEarlyOnSetByIdTest() throws IOException {
 	Report result = new Report();
 	when(countTriggerServiceMock.numberOfTriggerById(4)).thenReturn(7);
-	result = reportService.getReportById(4, "Test", "TestEarlyOnset", "F", "2002-06-28");
+	result = reportService.getReportByPatientId(4, "Test", "TestEarlyOnset", "F", "2002-06-28");
 	assertEquals(result.getDiabetesAssessment(), "Early onset");
     }
     
