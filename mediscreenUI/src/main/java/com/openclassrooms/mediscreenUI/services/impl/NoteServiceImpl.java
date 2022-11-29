@@ -12,6 +12,13 @@ import com.openclassrooms.mediscreenUI.beans.NoteBean;
 import com.openclassrooms.mediscreenUI.proxies.IMicroServiceNoteProxy;
 import com.openclassrooms.mediscreenUI.services.INoteService;
 
+/**
+ * La classe NoteServiceImpl est l'implémentation de l'interface INoteService.
+ * 
+ * @see INoteService
+ * @author Dylan
+ *
+ */
 @Service
 public class NoteServiceImpl implements INoteService {
 
@@ -56,6 +63,7 @@ public class NoteServiceImpl implements INoteService {
 	noteUpdated.setPatient(note.getPatient());
 	String noteUpdatedString = noteUpdated.toString();
 	String noteRegisterString = note.toString();
+	//On vérifie si des modifications ont été apportées.
 	if (noteRegisterString.equals(noteUpdatedString)) {
 	    result = 0;
 	    logger.info("No information has been changed");

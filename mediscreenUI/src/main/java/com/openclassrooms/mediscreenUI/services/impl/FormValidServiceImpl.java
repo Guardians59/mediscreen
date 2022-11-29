@@ -6,6 +6,13 @@ import com.openclassrooms.mediscreenUI.beans.NoteBean;
 import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.services.IFormValidService;
 
+/**
+ * La classe FormValidServiceImpl est l'implémentation de l'interface IFormValidService.
+ * 
+ * @see IFormValidService
+ * @author Dylan
+ *
+ */
 @Service
 public class FormValidServiceImpl implements IFormValidService {
 

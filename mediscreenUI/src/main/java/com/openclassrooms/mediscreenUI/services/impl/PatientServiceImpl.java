@@ -12,6 +12,13 @@ import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.proxies.IMicroServicePatientProxy;
 import com.openclassrooms.mediscreenUI.services.IPatientService;
 
+/**
+ * La classe PatientServiceImpl est l'implémentation de l'interface IPatientService.
+ * 
+ * @see IPatientService
+ * @author Dylan
+ *
+ */
 @Service
 public class PatientServiceImpl implements IPatientService {
 
@@ -56,6 +63,7 @@ public class PatientServiceImpl implements IPatientService {
 	PatientBean patient = patientProxy.getPatientById(id);
 	String patientInfos = patient.toString();
 	String patientInfosUpdated = patientUpdated.toString();
+	//On vérifie si des modifications ont été apportées.
 	if (patientInfos.equals(patientInfosUpdated)) {
 	    result = 0;
 	    logger.info("No information has been changed");

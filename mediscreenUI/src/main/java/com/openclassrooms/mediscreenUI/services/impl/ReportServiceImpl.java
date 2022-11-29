@@ -12,6 +12,13 @@ import com.openclassrooms.mediscreenUI.beans.ReportBean;
 import com.openclassrooms.mediscreenUI.proxies.IMicroServiceReportProxy;
 import com.openclassrooms.mediscreenUI.services.IReportService;
 
+/**
+ * La classe ReportServiceImpl est l'implémentation de l'interface IReportService.
+ * 
+ * @see IReportService
+ * @author Dylan
+ *
+ */
 @Service
 public class ReportServiceImpl implements IReportService {
 
@@ -42,6 +49,12 @@ public class ReportServiceImpl implements IReportService {
 	List<String> firstNameList = new ArrayList<>();
 	List<String> genderList = new ArrayList<>();
 	List<String> birthdayList = new ArrayList<>();
+	
+	/*
+	 * On initie une boucle forEach sur la liste des patients portant le même nom
+	 * afin d'ajouter chaque id, prénom, sexe et date de naissance aux listes
+	 * correspondantes pour la génération des rapports.
+	 */
 	listPatient.forEach(patient -> {
 	    patientIdList.add(patient.getId());
 	    firstNameList.add(patient.getFirstName());

@@ -1,0 +1,9 @@
+com.openclassrooms.mediscreenUI
+com.openclassrooms.mediscreenUI.beans
+com.openclassrooms.mediscreenUI.config
+com.openclassrooms.mediscreenUI.controller
+com.openclassrooms.mediscreenUI.models
+com.openclassrooms.mediscreenUI.proxies
+com.openclassrooms.mediscreenUI.service
+com.openclassrooms.mediscreenUI.services
+com.openclassrooms.mediscreenUI.services.impl
