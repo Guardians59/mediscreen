@@ -12,8 +12,11 @@ import com.openclassrooms.mediscreenUI.beans.PatientBean;
 import com.openclassrooms.mediscreenUI.proxies.IMicroServicePatientProxy;
 import com.openclassrooms.mediscreenUI.services.IPatientService;
 
+import feign.FeignException;
+
 /**
- * La classe PatientServiceImpl est l'implémentation de l'interface IPatientService.
+ * La classe PatientServiceImpl est l'implémentation de l'interface
+ * IPatientService.
  * 
  * @see IPatientService
  * @author Dylan
@@ -34,11 +37,13 @@ public class PatientServiceImpl implements IPatientService {
 	logger.debug("Search patient with firstname : " + firstName + " lastname : " + lastName + " and birthday : "
 		+ birthday);
 	PatientBean patient = new PatientBean();
-	patient = patientProxy.getPatient(firstName, lastName, birthday);
-	if(patient.getFirstName() != null) {
+	try {
+	    patient = patientProxy.getPatient(firstName, lastName, birthday);
+	} catch (FeignException e) {
+	    logger.error("No patient found");
+	}
+	if (patient.getFirstName() != null) {
 	    logger.info("Patient successfully found");
-	} else {
-	    logger.error("No patients found");
 	}
 	return patient;
     }
@@ -48,11 +53,11 @@ public class PatientServiceImpl implements IPatientService {
 	logger.debug("Search patient with id : " + id);
 	PatientBean patient = new PatientBean();
 	patient = patientProxy.getPatientById(id);
-	if(patient.getFirstName() != null) {
+	if (patient.getFirstName() != null) {
 	    logger.info("Patient successfully found");
 	} else {
 	    logger.error("No patients found");
-	} 
+	}
 	return patient;
     }
 
@@ -63,7 +68,7 @@ public class PatientServiceImpl implements IPatientService {
 	PatientBean patient = patientProxy.getPatientById(id);
 	String patientInfos = patient.toString();
 	String patientInfosUpdated = patientUpdated.toString();
-	//On vérifie si des modifications ont été apportées.
+	// On vérifie si des modifications ont été apportées.
 	if (patientInfos.equals(patientInfosUpdated)) {
 	    result = 0;
 	    logger.info("No information has been changed");
@@ -82,7 +87,7 @@ public class PatientServiceImpl implements IPatientService {
 	PatientBean patient = new PatientBean();
 	patient = newPatient;
 	ResponseEntity<?> resultAdd = patientProxy.addPatient(patient);
-	if(resultAdd.getStatusCode().value() == 201) {
+	if (resultAdd.getStatusCode().value() == 201) {
 	    result = true;
 	    logger.info("Patient added with successfully");
 	} else {
@@ -96,7 +101,7 @@ public class PatientServiceImpl implements IPatientService {
 	logger.debug("Delete the patient with id : " + id);
 	boolean result = false;
 	ResponseEntity<?> resultDelete = patientProxy.deletePatient(id);
-	if(resultDelete.getStatusCode().value() == 200) {
+	if (resultDelete.getStatusCode().value() == 200) {
 	    result = true;
 	    logger.info("The patient with id " + id + " deleted with success");
 	} else {
@@ -110,7 +115,7 @@ public class PatientServiceImpl implements IPatientService {
 	logger.debug("Search patient with lastName : " + lastName);
 	List<PatientBean> result = new ArrayList<>();
 	result = patientProxy.getAllByName(lastName);
-	if(!result.isEmpty()) {
+	if (!result.isEmpty()) {
 	    logger.info("Patient successfully found");
 	} else {
 	    logger.error("No patients found");
